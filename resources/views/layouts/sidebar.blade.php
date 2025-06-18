@@ -10,7 +10,9 @@
                         class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
 
-                <li class="menu-header">Starter Options</li>
+            @role('admin')
+
+                <li class="menu-header">Master Management</li>
                 {{-- jika user atau tarif atau kondisi maka beri statu aktif --}}
                 <li
                     class="nav-item dropdown">
@@ -99,21 +101,6 @@
                     <li><a class="nav-link" href="">Request Available</a></li>
                 </ul>
             </li>
-             <li
-                class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
-                        aria-hidden="true"></i>
-                    <span>IT Infrastruktur</span></a>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="">Request Complated</a></li>
-                </ul>
-                <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="">Request On Progress</a></li>
-                </ul>
-                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="">Request Available</a></li>
-                </ul>
-            </li>
 
                 <li class="menu-header">User Management</li>
                 {{-- jika user atau tarif atau kondisi maka beri statu aktif --}}
@@ -125,6 +112,106 @@
                         <span>Invite User</span>
                     </a>
                 </li>
+
+            @endrole
+
+            @role('agent')
+                <li class="menu-header">Request Management</li>
+                 <li class="nav-item">
+                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                        <span>Requests Available</span>
+                    </a>
+                </li>
+
+                <li
+                    class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                            aria-hidden="true"></i>
+                        <span>Your Requests</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Request Completed</a></li>
+                    </ul>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                    </ul>
+                </li>
+            @endrole
+
+            @role('user')
+                <li class="menu-header">Create Request</li>
+                <li
+                    class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                            aria-hidden="true"></i>
+                        <span>IT Infrastruktur</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Server Spec Upgrade</a></li>
+                    </ul>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Server Software Install</a></li>
+                    </ul>
+                </li>
+                <li
+                    class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                            aria-hidden="true"></i>
+                        <span>IT Network</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">IP Address Location</a></li>
+                    </ul>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Firewall Access</a></li>
+                    </ul>
+                </li>
+                <li
+                    class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                            aria-hidden="true"></i>
+                        <span>IT Architecture</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Review</a></li>
+                    </ul>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Documentation</a></li>
+                    </ul>
+                </li>
+                <li
+                    class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                            aria-hidden="true"></i>
+                        <span>DevSecOps</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Security Scan</a></li>
+                    </ul>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Production Merge</a></li>
+                    </ul>
+                </li>
+                <li
+                    class="nav-item dropdown">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                            aria-hidden="true"></i>
+                        <span>Database Administrator</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Query Execution</a></li>
+                    </ul>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link" href="">Data Retrieval</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-header">Your Request</li>
+                 <li class="nav-item">
+                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                        <span>Requests Complated</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                        <span>Requests On Progress</span>
+                    </a>
+                </li>
+            @endrole
 
     </aside>
 </div>
