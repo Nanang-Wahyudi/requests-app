@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('requests', function (Blueprint $table) {
-            $table->unsignedBigInteger('pic_id')->after('note');
+        Schema::create('departments', function (Blueprint $table) {
+            $table->id();
+            $table->string('department_name');
+            $table->unsignedBigInteger('role_id');
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('requests', function (Blueprint $table) {
-            $table->dropColumn('pic_id');
-        });
+        Schema::dropIfExists('departments');
     }
 };

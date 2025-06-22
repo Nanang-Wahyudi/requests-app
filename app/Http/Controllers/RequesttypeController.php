@@ -16,9 +16,9 @@ class RequesttypeController extends Controller
     public function index(Request $request)
     {
          if ($request->ajax()) {
-            $data = DB::table('requesttypes')
-            ->join('roles', 'requesttypes.role_id', '=', 'roles.id')
-            ->select('requesttypes.*', 'roles.name')
+            $data = DB::table('request_types')
+            ->join('roles', 'request_types.role_id', '=', 'roles.id')
+            ->select('request_types.*', 'roles.name')
             ->get();
 
             return DataTables::of($data)
