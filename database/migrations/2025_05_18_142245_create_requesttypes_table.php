@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('request_types', function (Blueprint $table) {
             $table->id();
             $table->string('request_type_name');
-            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('role_id');
         });
     }
 
