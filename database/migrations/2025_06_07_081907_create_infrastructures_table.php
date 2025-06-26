@@ -20,7 +20,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('software_version')->nullable();
             $table->unsignedBigInteger('request_id');
-            $table->timestamps();
         });
     }
 

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('pic')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('request_type_id');
-            $table->timestamps();
         });
     }
 

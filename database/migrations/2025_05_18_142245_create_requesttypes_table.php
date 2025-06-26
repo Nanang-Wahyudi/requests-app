@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('requesttypes', function (Blueprint $table) {
+        Schema::create('request_types', function (Blueprint $table) {
             $table->id();
             $table->string('request_type_name');
-            $table->unsignedBigInteger('role_id');
-            $table->timestamps();
+            $table->unsignedBigInteger('department_id');
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('requesttypes');
+        Schema::dropIfExists('request_types');
     }
 };
