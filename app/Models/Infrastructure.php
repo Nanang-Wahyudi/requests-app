@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Infrastructure extends Model
 {
-    //
+    protected $guarded = ['id'];
+
+    public $timestamps = false;
+
 }

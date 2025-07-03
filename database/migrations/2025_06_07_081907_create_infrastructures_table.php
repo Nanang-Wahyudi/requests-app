@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('server_name')->nullable();
             $table->string('current_spec')->nullable();
             $table->string('requested_spec')->nullable();
-            $table->text('description')->nullable();
+            $table->text('purpose')->nullable();
             $table->string('software_version')->nullable();
+            $table->string('software_name')->nullable();
             $table->unsignedBigInteger('request_id');
         });
     }

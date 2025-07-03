@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Infrastructure;
+use App\Models\RequestModel;
 use Yajra\DataTables\Facades\DataTables;
 
 class InfrastructureController extends Controller
@@ -16,9 +18,9 @@ class InfrastructureController extends Controller
          if ($request->ajax()) {
             $data = DB::table('requests')
             ->join('infrastructures', 'infrastructures.request_id', '=', 'requests.id')
-            ->join('requesttypes', 'requesttypes.id', '=', 'requests.request_type_id')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
-            ->select('requests.id', 'users.name', 'requesttypes.request_type_name', 'requests.request_date', 'requests.pic', 'requests.collect_date', 'requests.status', 'requests.complated_date')
+            ->select('requests.id', 'users.name', 'request_types.request_type_name', 'requests.request_date', 'requests.pic', 'requests.collect_date', 'requests.status', 'requests.complated_date')
             ->where('requests.status', 'complated')
             ->get();
 
@@ -82,5 +84,24 @@ class InfrastructureController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function formspecup()
+    {
+        $reqtypes = DB::table('request_types')->get();
+        return view('infrastructure.formspecup', [
+            'title' => "Form Spec Upgrade",
+            'reqtypes' => $reqtypes
+        ]);
+    }
+
+    public function saveformspec(Request $request)
+    {
+        $req = RequestModel::create([
+            'request_date' => $request->indikator_kinerja,
+            'status' => $request->jenis_indikator,
+            'user_id' => $request->id_kategori,
+            'id_satuan' => $request->id_satuan
+        ]);
     }
 }

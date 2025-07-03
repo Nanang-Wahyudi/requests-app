@@ -107,9 +107,6 @@
                     <a href="{{ url('users') }}" class="nav-link"><i class="fas fa-user"></i>
                         <span>Data User</span>
                     </a>
-                    <a href="#" class="nav-link"><i class="fas fa-user"></i>
-                        <span>Invite User</span>
-                    </a>
                 </li>
 
             @endrole
