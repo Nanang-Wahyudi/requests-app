@@ -6,14 +6,14 @@
                 <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item active">Add Spec Upgrade</div>
+                    <div class="breadcrumb-item active">Add Soft Install</div>
                 </div>
             </div>
 
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ url('proses-formspec') }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             <div class="row">
 
@@ -36,19 +36,19 @@
                                  </div>
 
                                    <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Current Spec</label>
-                                    <input type="text" class="form-control @error('current_spec') is-invalid @enderror"
-                                        id="current_spec" name="current_spec" value="{{ old('current_spec') }}" required>
-                                    @error('current_spec')
+                                    <label for="kendaraan" class="form-label">Software Name</label>
+                                    <input type="text" class="form-control @error('software_name') is-invalid @enderror"
+                                        id="software_name" name="software_name" value="{{ old('software_name') }}" required>
+                                    @error('software_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                  </div>
 
                                   <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Requested Spec</label>
-                                    <input type="text" class="form-control @error('requested_spec') is-invalid @enderror"
-                                        id="requested_spec" name="requested_spec" value="{{ old('requested_spec') }}" required>
-                                    @error('requested_spec')
+                                    <label for="kendaraan" class="form-label">Software Version</label>
+                                    <input type="text" class="form-control @error('software_version') is-invalid @enderror"
+                                        id="software_version" name="software_version" value="{{ old('software_version') }}" required>
+                                    @error('software_version')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                  </div>

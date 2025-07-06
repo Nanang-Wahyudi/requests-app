@@ -6,49 +6,31 @@
                 <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item active">Add Spec Upgrade</div>
+                    <div class="breadcrumb-item active">Add Document Architecture</div>
                 </div>
             </div>
 
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ url('proses-formspec') }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             <div class="row">
 
                                 <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Ticket URL</label>
-                                    <input type="text" class="form-control @error('ticket_url') is-invalid @enderror"
-                                        id="ticket_url" name="ticket_url" value="{{ old('ticket_url') }}" required>
-                                    @error('ticket_url')
+                                    <label for="kendaraan" class="form-label">Service Name</label>
+                                    <input type="text" class="form-control @error('service_name') is-invalid @enderror"
+                                        id="service_name" name="service_name" value="{{ old('service_name') }}" required>
+                                    @error('service_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                  <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Server Name</label>
-                                    <input type="text" class="form-control @error('server_name') is-invalid @enderror"
-                                        id="server_name" name="server_name" value="{{ old('server_name') }}" required>
-                                    @error('server_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                 </div>
-
-                                   <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Current Spec</label>
-                                    <input type="text" class="form-control @error('current_spec') is-invalid @enderror"
-                                        id="current_spec" name="current_spec" value="{{ old('current_spec') }}" required>
-                                    @error('current_spec')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                 </div>
-
-                                  <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Requested Spec</label>
-                                    <input type="text" class="form-control @error('requested_spec') is-invalid @enderror"
-                                        id="requested_spec" name="requested_spec" value="{{ old('requested_spec') }}" required>
-                                    @error('requested_spec')
+                                    <label for="kendaraan" class="form-label">Fitur</label>
+                                    <input type="text" class="form-control @error('fitur') is-invalid @enderror"
+                                        id="fitur" name="fitur" value="{{ old('fitur') }}" required>
+                                    @error('fitur')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                  </div>

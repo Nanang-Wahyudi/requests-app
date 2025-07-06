@@ -6,14 +6,14 @@
                 <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item active">Add Spec Upgrade</div>
+                    <div class="breadcrumb-item active">Add Security Scan</div>
                 </div>
             </div>
 
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ url('proses-formspec') }}" method="POST">
+                        <form action="" method="POST">
                             @csrf
                             <div class="row">
 
@@ -27,28 +27,29 @@
                                 </div>
 
                                  <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Server Name</label>
-                                    <input type="text" class="form-control @error('server_name') is-invalid @enderror"
-                                        id="server_name" name="server_name" value="{{ old('server_name') }}" required>
-                                    @error('server_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <label for="kendaraan" class="form-label">Type Scan</label>
+                                    <select class="form-control" name="type_Scan">
+                                        <option value="">-Pilih Type Scan-</option>
+                                        <option value="SAST">SAST</option>
+                                        <option value="DAST">DAST</option>
+                                        <option value="Aqua Security">Aqua Security</option>
+                                    </select>
                                  </div>
 
-                                   <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Current Spec</label>
-                                    <input type="text" class="form-control @error('current_spec') is-invalid @enderror"
-                                        id="current_spec" name="current_spec" value="{{ old('current_spec') }}" required>
-                                    @error('current_spec')
+                                  <div class="col-md-12 mb-3">
+                                    <label for="kendaraan" class="form-label">Repository URL</label>
+                                    <input type="text" class="form-control @error('repository_url') is-invalid @enderror"
+                                        id="repository_url" name="repository_url" value="{{ old('repository_url') }}" required>
+                                    @error('repository_url')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                  </div>
 
                                   <div class="col-md-12 mb-3">
-                                    <label for="kendaraan" class="form-label">Requested Spec</label>
-                                    <input type="text" class="form-control @error('requested_spec') is-invalid @enderror"
-                                        id="requested_spec" name="requested_spec" value="{{ old('requested_spec') }}" required>
-                                    @error('requested_spec')
+                                    <label for="kendaraan" class="form-label">Branch Name</label>
+                                    <input type="text" class="form-control @error('branch_name') is-invalid @enderror"
+                                        id="branch_name" name="branch_name" value="{{ old('branch_name') }}" required>
+                                    @error('branch_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                  </div>

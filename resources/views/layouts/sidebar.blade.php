@@ -115,14 +115,14 @@
                 <li class="menu-header">Create Request</li>
                 <li
                     class="nav-item dropdown">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
+                    <a href="" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa fa-id-card"
                             aria-hidden="true"></i>
                         <span>IT Infrastruktur</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Server Spec Upgrade</a></li>
+                        <li><a class="nav-link" href="{{ url('form-spec-upgrade') }}">Server Spec Upgrade</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Server Software Install</a></li>
+                        <li><a class="nav-link" href="{{ url('form-soft-install') }}">Server Software Install</a></li>
                     </ul>
                 </li>
                 <li
@@ -131,10 +131,10 @@
                             aria-hidden="true"></i>
                         <span>IT Network</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">IP Address Location</a></li>
+                        <li><a class="nav-link" href="{{ url('form-address-ip') }}">IP Address Location</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Firewall Access</a></li>
+                        <li><a class="nav-link" href="{{ url('form-firewall-access') }}">Firewall Access</a></li>
                     </ul>
                 </li>
                 <li
@@ -143,10 +143,10 @@
                             aria-hidden="true"></i>
                         <span>IT Architecture</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Review</a></li>
+                        <li><a class="nav-link" href="{{ url('form-review-arch') }}">Review</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Documentation</a></li>
+                        <li><a class="nav-link" href="{{ url('form-doc-arch') }}">Documentation</a></li>
                     </ul>
                 </li>
                 <li
@@ -155,10 +155,10 @@
                             aria-hidden="true"></i>
                         <span>DevSecOps</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Security Scan</a></li>
+                        <li><a class="nav-link" href="{{ url('form-sec-scan') }}">Security Scan</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Production Merge</a></li>
+                        <li><a class="nav-link" href="{{ url('form-prod-merge') }}">Production Merge</a></li>
                     </ul>
                 </li>
                 <li
@@ -167,21 +167,21 @@
                             aria-hidden="true"></i>
                         <span>Database Administrator</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Query Execution</a></li>
+                        <li><a class="nav-link" href="{{ url('form-query-exec') }}">Query Execution</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Data Retrieval</a></li>
+                        <li><a class="nav-link" href="{{ url('form-data-retrieval') }}">Data Retrieval</a></li>
                     </ul>
                 </li>
 
                 <li class="menu-header">Your Request</li>
                  <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                    <a href="{{ url('developer-request-complated') }}" class="nav-link"><i class="fas fa-table"></i>
                         <span>Requests Complated</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                    <a href="{{ url('developer-request-onprogress') }}" class="nav-link"><i class="fas fa-table"></i>
                         <span>Requests On Progress</span>
                     </a>
                 </li>

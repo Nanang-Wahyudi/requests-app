@@ -95,6 +95,15 @@ class InfrastructureController extends Controller
         ]);
     }
 
+    public function formsoftinstall()
+    {
+        $reqtypes = DB::table('request_types')->get();
+        return view('infrastructure.formsoftinstall', [
+            'title' => "Form Soft Install",
+            'reqtypes' => $reqtypes
+        ]);
+    }
+
     public function saveformspec(Request $request)
     {
         $req = RequestModel::create([
