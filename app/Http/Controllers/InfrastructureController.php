@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Infrastructure;
-use App\Models\RequestModel;
+use App\Models\Requests;
 use Yajra\DataTables\Facades\DataTables;
+use Carbon\Carbon;
 
 class InfrastructureController extends Controller
 {
@@ -106,11 +107,31 @@ class InfrastructureController extends Controller
 
     public function saveformspec(Request $request)
     {
-        $req = RequestModel::create([
-            'request_date' => $request->indikator_kinerja,
-            'status' => $request->jenis_indikator,
-            'user_id' => $request->id_kategori,
-            'id_satuan' => $request->id_satuan
+        $tgl = Carbon::now();
+        $tgl_now = $tgl->format('Y-m-d');
+        $user_id = auth()->user()->id;
+
+        $req = Requests::create([
+            'request_date' => $tgl_now,
+            'status' => 'onprogress',
+            'user_id' => $user_id,
+            'request_type_id' => $request->req_id
         ]);
+
+         if($req){
+            // $last_id = Requests::latest()->first();
+            $req_id = $req->id;
+
+                Infrastructure::create([
+                    'ticket_url' => $request->ticket_url,
+                    'server_name' => $request->server_name,
+                    'current_spec' => $request->current_spec,
+                    'requested_spec' => $request->requested_spec,
+                    'purpose' => $request->purpose,
+                    'request_id' => $req_id
+                ]);
+         }
+
+         return redirect('developer-request-onprogress')->with('success', 'Data berhasil dibuat.');
     }
 }

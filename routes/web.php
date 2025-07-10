@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RequesttypeController;
+use App\Http\Controllers\RequestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InfrastructureController;
 use App\Http\Controllers\NetworkController;
@@ -31,6 +32,8 @@ Route::get('form-sec-scan', [DevsecopsController::class, 'formsecscan'])->middle
 Route::get('form-prod-merge', [DevsecopsController::class, 'formprodmerge'])->middleware(['auth']);
 Route::get('form-query-exec', [DbadministratorController::class, 'formqueryexec'])->middleware(['auth']);
 Route::get('form-data-retrieval', [DbadministratorController::class, 'formdataretrieval'])->middleware(['auth']);
+Route::get('developer-request-complated', [RequestController::class, 'reqcomplated'])->middleware(['auth']);
+Route::get('developer-request-onprogress', [RequestController::class, 'reqonprogress'])->middleware(['auth']);
 Route::post('proses-formspec', [InfrastructureController::class, 'saveformspec'])->middleware(['auth']);
 
 
