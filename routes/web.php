@@ -13,7 +13,7 @@ use App\Http\Controllers\DevsecopsController;
 use App\Http\Controllers\DbadministratorController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('home', [DashboardController::class, 'index'])->name('home')->middleware(['auth']);
@@ -35,5 +35,14 @@ Route::get('form-data-retrieval', [DbadministratorController::class, 'formdatare
 Route::get('developer-request-complated', [RequestController::class, 'reqcomplated'])->middleware(['auth']);
 Route::get('developer-request-onprogress', [RequestController::class, 'reqonprogress'])->middleware(['auth']);
 Route::post('proses-formspec', [InfrastructureController::class, 'saveformspec'])->middleware(['auth']);
+Route::post('proses-formsoft', [InfrastructureController::class, 'saveformsoft'])->middleware(['auth']);
+Route::post('proses-formipaddress', [NetworkController::class, 'saveformipaddress'])->middleware(['auth']);
+Route::post('proses-formfirewall', [NetworkController::class, 'saveformfirewall'])->middleware(['auth']);
+Route::post('proses-formreview', [ArchitectureController::class, 'saveformreview'])->middleware(['auth']);
+Route::post('proses-formdoc', [ArchitectureController::class, 'saveformdoc'])->middleware(['auth']);
+Route::post('proses-formsecscan', [DevsecopsController::class, 'saveformsecscan'])->middleware(['auth']);
+Route::post('proses-formprodmerge', [DevsecopsController::class, 'saveformprodmerge'])->middleware(['auth']);
+Route::post('proses-formqueryex', [DbadministratorController::class, 'saveformqueryex'])->middleware(['auth']);
+Route::post('proses-formdataret', [DbadministratorController::class, 'saveformdataret'])->middleware(['auth']);
 
 

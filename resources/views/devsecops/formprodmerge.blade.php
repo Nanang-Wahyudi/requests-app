@@ -13,7 +13,7 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form action="{{ url('proses-formprodmerge') }}" method="POST">
                             @csrf
                             <div class="row">
 

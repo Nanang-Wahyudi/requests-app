@@ -13,7 +13,7 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form action="{{ url('proses-formsecscan') }}" method="POST">
                             @csrf
                             <div class="row">
 
@@ -57,7 +57,7 @@
                                   <div class="col-md-12 mb-3">
                                     <label for="kendaraan" class="form-label">Purpose</label>
                                     <input type="text" class="form-control @error('purpose') is-invalid @enderror"
-                                        id="purpose" name="requested_spec" value="{{ old('purpose') }}" required>
+                                        id="purpose" name="purpose" value="{{ old('purpose') }}" required>
                                     @error('purpose')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

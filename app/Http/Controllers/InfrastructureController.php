@@ -134,4 +134,34 @@ class InfrastructureController extends Controller
 
          return redirect('developer-request-onprogress')->with('success', 'Data berhasil dibuat.');
     }
+
+       public function saveformsoft(Request $request)
+    {
+         $tgl = Carbon::now();
+        $tgl_now = $tgl->format('Y-m-d');
+        $user_id = auth()->user()->id;
+
+        $req = Requests::create([
+            'request_date' => $tgl_now,
+            'status' => 'onprogress',
+            'user_id' => $user_id,
+            'request_type_id' => $request->req_id
+        ]);
+
+         if($req){
+            // $last_id = Requests::latest()->first();
+            $req_id = $req->id;
+
+                Infrastructure::create([
+                    'ticket_url' => $request->ticket_url,
+                    'server_name' => $request->server_name,
+                    'software_name' => $request->software_name,
+                    'software_version' => $request->software_version,
+                    'purpose' => $request->purpose,
+                    'request_id' => $req_id
+                ]);
+         }
+
+         return redirect('developer-request-onprogress')->with('success', 'Data berhasil dibuat.');
+    }
 }
