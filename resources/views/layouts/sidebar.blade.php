@@ -187,110 +187,26 @@
                 </li>
             @endrole
 
-            @role('IT Infrastructure')
+            @hasanyrole('IT Infrastructure|IT Architecture|IT Network|DevSecOps|Database Administrator')
                 <li class="menu-header">IT Infrastructure</li>
                  <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                    <a href="{{ url('agent-request-available') }}" class="nav-link"><i class="fas fa-table"></i>
                         <span>Requests Available</span>
                     </a>
                 </li>
 
                 <li class="menu-header">Your Request</li>
                  <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                    <a href="{{ url('agent-request-complated') }}" class="nav-link"><i class="fas fa-table"></i>
                         <span>Requests Complated</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
+                    <a href="{{ url('agent-request-onprogress') }}" class="nav-link"><i class="fas fa-table"></i>
                         <span>Requests On Progress</span>
                     </a>
                 </li>
-            @endrole
-
-            @role('IT Architecture')
-                <li class="menu-header">IT Architecture</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Available</span>
-                    </a>
-                </li>
-
-                <li class="menu-header">Your Request</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Complated</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests On Progress</span>
-                    </a>
-                </li>
-            @endrole
-
-            @role('IT Network')
-                <li class="menu-header">IT Network</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Available</span>
-                    </a>
-                </li>
-
-                <li class="menu-header">Your Request</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Complated</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests On Progress</span>
-                    </a>
-                </li>
-            @endrole
-
-            @role('DevSecOps')
-                <li class="menu-header">DevSecOps</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Available</span>
-                    </a>
-                </li>
-
-                <li class="menu-header">Your Request</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Complated</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests On Progress</span>
-                    </a>
-                </li>
-            @endrole
-
-            @role('Database Administrator')
-                <li class="menu-header">Database Administrator</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Available</span>
-                    </a>
-                </li>
-
-                <li class="menu-header">Your Request</li>
-                 <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests Complated</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link"><i class="fas fa-table"></i>
-                        <span>Requests On Progress</span>
-                    </a>
-                </li>
-            @endrole
+            @endhasanyrole
 
     </aside>
 </div>

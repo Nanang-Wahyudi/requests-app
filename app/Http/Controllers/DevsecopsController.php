@@ -67,7 +67,7 @@ class DevsecopsController extends Controller
 
         $req = Requests::create([
             'request_date' => $tgl_now,
-            'status' => 'onprogress',
+            'status' => 'waiting',
             'user_id' => $user_id,
             'request_type_id' => $request->req_id
         ]);

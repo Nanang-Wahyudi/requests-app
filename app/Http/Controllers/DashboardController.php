@@ -12,6 +12,7 @@ class DashboardController extends Controller
         $onprogress = DB::table('requests')->where('status', 'onprogress')->count();
         $complated = DB::table('requests')->where('status', 'complated')->count();
         $rejected = DB::table('requests')->where('status', 'rejected')->count();
+        $waiting = DB::table('requests')->where('status', 'waiting')->count();
 
         $requests = DB::table('requests')
                 ->select(
@@ -19,7 +20,7 @@ class DashboardController extends Controller
                     'status',
                     DB::raw('COUNT(*) as total')
                 )
-                ->whereIn('status', ['complated', 'rejected', 'onprogress'])
+                ->whereIn('status', ['complated', 'rejected', 'onprogress', 'waiting'])
                 ->groupBy('bulan', 'status')
                 ->orderBy('bulan')
                 ->get();
@@ -30,6 +31,7 @@ class DashboardController extends Controller
                 'complated' => [],
                 'rejected' => [],
                 'onprogress' => [],
+                'waiting' => [],
             ];
 
             // Ambil semua bulan unik
@@ -56,6 +58,7 @@ class DashboardController extends Controller
             'onprogress' => $onprogress,
             'complated' => $complated,
             'rejected' => $rejected,
+            'waiting' => $waiting,
             'bulanList' => $bulanList,
             'statusData' => $statusData
         ]);

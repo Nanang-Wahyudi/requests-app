@@ -44,5 +44,9 @@ Route::post('proses-formsecscan', [DevsecopsController::class, 'saveformsecscan'
 Route::post('proses-formprodmerge', [DevsecopsController::class, 'saveformprodmerge'])->middleware(['auth']);
 Route::post('proses-formqueryex', [DbadministratorController::class, 'saveformqueryex'])->middleware(['auth']);
 Route::post('proses-formdataret', [DbadministratorController::class, 'saveformdataret'])->middleware(['auth']);
+Route::get('agent-request-available', [RequestController::class, 'agentreqavailable'])->middleware(['auth']);
+Route::get('agent-request-onprogress', [RequestController::class, 'agentreqonprogress'])->middleware(['auth']);
+Route::get('agent-request-complated', [RequestController::class, 'agentreqcomplated'])->middleware(['auth']);
+Route::get('agent-request-available/{id}/asign', [RequestController::class, 'agentasignreq'])->middleware(['auth']);
 
 
