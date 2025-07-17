@@ -22,7 +22,7 @@ class InfrastructureController extends Controller
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'users.name', 'request_types.request_type_name')
-            ->where('requests.status', 'complated')
+            ->where('requests.status', 'COMPLATED')
             ->get();
 
             return DataTables::of($data)
@@ -113,7 +113,7 @@ class InfrastructureController extends Controller
 
         $req = Requests::create([
             'request_date' => $tgl_now,
-            'status' => 'waiting',
+            'status' => 'WAITING',
             'user_id' => $user_id,
             'request_type_id' => $request->req_id
         ]);
@@ -143,7 +143,7 @@ class InfrastructureController extends Controller
 
         $req = Requests::create([
             'request_date' => $tgl_now,
-            'status' => 'waiting',
+            'status' => 'WAITING',
             'user_id' => $user_id,
             'request_type_id' => $request->req_id
         ]);

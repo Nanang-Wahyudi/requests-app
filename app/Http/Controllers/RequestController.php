@@ -19,7 +19,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'complated')
+            ->where('requests.status', 'COMPLATED')
             ->get();
 
             return DataTables::of($data)
@@ -44,7 +44,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'waiting')
+            ->where('requests.status', 'WAITING')
             ->get();
 
             return DataTables::of($data)
@@ -73,7 +73,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('request_types.role_id', $userRoles)
-            ->where('requests.status', 'waiting')
+            ->where('requests.status', 'WAITING')
             ->get();
 
             return DataTables::of($data)
@@ -103,7 +103,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
-            ->where('requests.status', 'onprogress')
+            ->where('requests.status', 'ON PROGRESS')
             ->get();
 
             return DataTables::of($data)
@@ -133,7 +133,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
-            ->where('requests.status', 'complated')
+            ->where('requests.status', 'COMPLATED')
             ->get();
 
             return DataTables::of($data)
@@ -160,7 +160,7 @@ class RequestController extends Controller
             ->update([
                 'collect_date' => $tgl_now,
                 'pic' => $userpic,
-                'status' => 'onprogress'
+                'status' => 'ON PROGRESS'
             ]);
 
         return redirect('agent-request-onprogress')->with('success', 'Request Berhasil diambil.');
