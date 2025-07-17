@@ -23,10 +23,10 @@ class RequesttypeController extends Controller
 
             return DataTables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function ($row) {
-                        return '<a href="' . route('requesttypes.edit', $row->id) . '" class="btn btn-primary btn-sm">Edit</a>
-                                <button class="btn btn-sm btn-danger delete-btn" data-id="'.$row->id.'">Delete</button>';
-                    })
+                    // ->addColumn('action', function ($row) {
+                    //     return '<a href="' . route('requesttypes.edit', $row->id) . '" class="btn btn-primary btn-sm">Edit</a>
+                    //             <button class="btn btn-sm btn-danger delete-btn" data-id="'.$row->id.'">Delete</button>';
+                    // })
                     ->rawColumns(['action'])
                     ->make(true);
                     }

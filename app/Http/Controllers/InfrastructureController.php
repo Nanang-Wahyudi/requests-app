@@ -21,14 +21,14 @@ class InfrastructureController extends Controller
             ->join('infrastructures', 'infrastructures.request_id', '=', 'requests.id')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
-            ->select('requests.id', 'users.name', 'request_types.request_type_name', 'requests.request_date', 'requests.pic', 'requests.collect_date', 'requests.status', 'requests.complated_date')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
             ->where('requests.status', 'complated')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return '<a href="' . route('infratructure-complated.show', $row->id) . '" class="btn btn-primary btn-sm">Edit</a>';
+                        return '<a href="#" class="btn btn-primary btn-sm">Detail</a>';
                     })
                     ->rawColumns(['action'])
                     ->make(true);
@@ -143,7 +143,7 @@ class InfrastructureController extends Controller
 
         $req = Requests::create([
             'request_date' => $tgl_now,
-            'status' => 'onprogress',
+            'status' => 'waiting',
             'user_id' => $user_id,
             'request_type_id' => $request->req_id
         ]);

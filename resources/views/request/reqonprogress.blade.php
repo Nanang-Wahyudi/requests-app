@@ -19,8 +19,13 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Id Request</th>
+                                    <th>Nama Pemohon</th>
+                                    <th>Type Request</th>
                                     <th>Request Date</th>
-                                    <th>Request Type</th>
+                                    <th>PIC</th>
+                                    <th>Collect Date</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -68,13 +73,33 @@
                         orderable: false,
                         searchable: false
                     },
+                     {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'request_type_name',
+                        name: 'request_type_name'
+                    },
                     {
                         data: 'request_date',
                         name: 'request_date'
                     },
                     {
-                        data: 'request_type_name',
-                        name: 'request_type_name'
+                        data: 'pic',
+                        name: 'pic'
+                    },
+                    {
+                        data: 'collect_date',
+                        name: 'collect_date'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'action',

@@ -3,7 +3,8 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>{{ $title ?? '' }}</h1>
+                <!-- <h1>{{ $title ?? '' }}</h1> -->
+                 <h1>IT Infrastructure - Request Complated</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
                     <div class="breadcrumb-item">Data Infrastructure</div>
@@ -15,9 +16,9 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        {{-- <div class="mb-3 d-flex justify-content-end gap-3">
+                        <!-- <div class="mb-3 d-flex justify-content-end gap-3">
                             <a href="{{ route('infrastructure-complated.create') }}" class="btn btn-primary btn-sm ml-2">Tambah data</a>
-                        </div> --}}
+                        </div> -->
                         <table id="infracomplatedTable" class="display">
                             <thead>
                                 <tr>

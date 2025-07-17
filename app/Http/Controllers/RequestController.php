@@ -16,9 +16,10 @@ class RequestController extends Controller
         if ($request->ajax()) {
             $data = DB::table('requests')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
-            ->select('requests.*', 'request_types.request_type_name')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'completed')
+            ->where('requests.status', 'complated')
             ->get();
 
             return DataTables::of($data)
@@ -40,9 +41,10 @@ class RequestController extends Controller
           if ($request->ajax()) {
             $data = DB::table('requests')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
-            ->select('requests.*', 'request_types.request_type_name')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'onprogress')
+            ->where('requests.status', 'waiting')
             ->get();
 
             return DataTables::of($data)
