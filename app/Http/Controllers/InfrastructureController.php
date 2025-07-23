@@ -39,6 +39,31 @@ class InfrastructureController extends Controller
         ]);
     }
 
+     public function onprogress(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('infrastructures', 'infrastructures.request_id', '=', 'requests.id')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('requests.status', 'ON PROGRESS')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return '<a href="#" class="btn btn-primary btn-sm">Detail</a>';
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('infrastructure.reqonprogress', [
+            'title' => "Infrastructure"
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

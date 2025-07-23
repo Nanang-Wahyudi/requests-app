@@ -4,10 +4,10 @@
         <section class="section">
             <div class="section-header">
                 <!-- <h1>{{ $title ?? '' }}</h1> -->
-                 <h1>IT Infrastructure - Request Complated</h1>
+                 <h1>IT Infrastructure - Request On Progress</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item">Infrastructure Complated</div>
+                    <div class="breadcrumb-item">Infrastructure On Progress</div>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
                         <!-- <div class="mb-3 d-flex justify-content-end gap-3">
                             <a href="{{ route('infrastructure-complated.create') }}" class="btn btn-primary btn-sm ml-2">Tambah data</a>
                         </div> -->
-                        <table id="infracomplatedTable" class="display">
+                        <table id="infraOnProgressTable" class="display">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -30,7 +30,6 @@
                                     <th>PIC</th>
                                     <th>Tanggal Ambil Request</th>
                                     <th>Status</th>
-                                    <th>Tanggal Menyelesaikan Request</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -68,10 +67,10 @@
             }
 
             // table data
-            $('#infracomplatedTable').DataTable({
+            $('#infraOnProgressTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('infrastructure-complated.index') }}",
+                ajax: "{{ route('infrastructure-onprogress.onprogress') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -105,10 +104,6 @@
                     {
                         data: 'status',
                         name: 'status'
-                    },
-                    {
-                        data: 'complated_date',
-                        name: 'complated_date'
                     },
                     {
                         data: 'action',
