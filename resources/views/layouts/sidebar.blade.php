@@ -34,7 +34,7 @@
                         <li><a class="nav-link" href="{{ url('infrastructure-complated') }}">Request Complated</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('infrastructure-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
                         <li><a class="nav-link" href="">Request Available</a></li>

@@ -15,16 +15,16 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-body">
-                        <div class="mb-3 d-flex justify-content-end gap-3">
+                        <!-- <div class="mb-3 d-flex justify-content-end gap-3">
                             <a href="{{ route('requesttypes.create') }}" class="btn btn-primary btn-sm ml-2">Tambah data</a>
-                        </div>
+                        </div> -->
                         <table id="reqtypeTable" class="display">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Request Type</th>
                                     <th>Role</th>
-                                    <th>Aksi</th>
+                                    <!-- <th>Aksi</th> -->
                                 </tr>
                             </thead>
                         </table>
@@ -79,12 +79,12 @@
                         data: 'name',
                         name: 'name'
                     },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
+                    // {
+                    //     data: 'action',
+                    //     name: 'action',
+                    //     orderable: false,
+                    //     searchable: false
+                    // }
                 ]
             });
 
