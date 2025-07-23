@@ -70,7 +70,7 @@
             $('#infraOnProgressTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('infrastructure-onprogress.onprogress') }}",
+                ajax: "{{ url('infrastructure-onprogress') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',

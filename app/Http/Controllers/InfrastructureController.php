@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Infrastructure;
+use App\Models\RequestDetail;
 use App\Models\Requests;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
@@ -18,11 +18,12 @@ class InfrastructureController extends Controller
     {
          if ($request->ajax()) {
             $data = DB::table('requests')
-            ->join('infrastructures', 'infrastructures.request_id', '=', 'requests.id')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'users.name', 'request_types.request_type_name')
-            ->where('requests.status', 'COMPLATED')
+            ->where('roles.name', 'IT Infrastructure')
+            ->where('requests.status', 'COMPLETED')
             ->get();
 
             return DataTables::of($data)
@@ -43,10 +44,11 @@ class InfrastructureController extends Controller
     {
          if ($request->ajax()) {
             $data = DB::table('requests')
-            ->join('infrastructures', 'infrastructures.request_id', '=', 'requests.id')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Infrastructure')
             ->where('requests.status', 'ON PROGRESS')
             ->get();
 
@@ -147,7 +149,7 @@ class InfrastructureController extends Controller
             // $last_id = Requests::latest()->first();
             $req_id = $req->id;
 
-                Infrastructure::create([
+                RequestDetail::create([
                     'ticket_url' => $request->ticket_url,
                     'server_name' => $request->server_name,
                     'current_spec' => $request->current_spec,
@@ -177,7 +179,7 @@ class InfrastructureController extends Controller
             // $last_id = Requests::latest()->first();
             $req_id = $req->id;
 
-                Infrastructure::create([
+                RequestDetail::create([
                     'ticket_url' => $request->ticket_url,
                     'server_name' => $request->server_name,
                     'software_name' => $request->software_name,

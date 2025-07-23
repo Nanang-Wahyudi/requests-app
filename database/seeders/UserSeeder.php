@@ -18,10 +18,10 @@ class UserSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'Manager IT']);
 
         $admin = User::firstOrCreate(
-            ['email' => 'managerIT@gmail.com'],
+            ['email' => 'manager@gmail.com'],
             [
                 'name' => 'Manager IT',
-                'password' => Hash::make('managerIT'),
+                'password' => Hash::make('manager'),
                 'email_verified_at' => now(),
                 'two_factor_secret' => null,
                 'two_factor_recovery_codes' => null,

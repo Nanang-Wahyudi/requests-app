@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Requests;
-use App\Models\Devsecop;
+use App\Models\RequestDetail;
 use Carbon\Carbon;
 
 class DevsecopsController extends Controller
@@ -46,9 +46,9 @@ class DevsecopsController extends Controller
             $req_id = $req->id;
 
             // Simpan ke tabel architecture
-            Devsecop::create([
+            RequestDetail::create([
                 'ticket_url' => $request->ticket_url,
-                'type_scan' => $request->type_scan,
+                'scan_type' => $request->scan_type,
                 'repository_url' => $request->repository_url,
                 'branch_name' => $request->branch_name,
                 'purpose' => $request->purpose,
@@ -77,7 +77,7 @@ class DevsecopsController extends Controller
             $req_id = $req->id;
 
             // Simpan ke tabel architecture
-            Devsecop::create([
+            RequestDetail::create([
                 'ticket_url' => $request->ticket_url,
                 'pr_url' => $request->pr_url,
                 'purpose' => $request->purpose,

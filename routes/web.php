@@ -22,7 +22,7 @@ Route::resource('requesttypes', RequesttypeController::class)->middleware(['auth
 Route::resource('users', UserController::class)->middleware(['auth']);
 Route::post('/users/{user}/update-role', [UserController::class, 'updateRole'])->name('users.updateRole')->middleware(['auth']);
 Route::resource('infrastructure-complated', InfrastructureController::class)->middleware(['auth']);
-Route::resource('infrastructure-onprogress', InfrastructureController::class)->middleware(['auth']);
+Route::get('infrastructure-onprogress', [InfrastructureController::class, 'onprogress'])->middleware(['auth']);
 Route::get('form-spec-upgrade', [InfrastructureController::class, 'formspecup'])->middleware(['auth']);
 Route::get('form-soft-install', [InfrastructureController::class, 'formsoftinstall'])->middleware(['auth']);
 Route::get('form-address-ip', [NetworkController::class, 'formaddressip'])->middleware(['auth']);
