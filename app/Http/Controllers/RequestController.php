@@ -109,7 +109,7 @@ class RequestController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return "<a href='/agent-request-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                        return "<a href='/agent-request-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
@@ -163,5 +163,20 @@ class RequestController extends Controller
             ]);
 
         return redirect('agent-request-onprogress')->with('success', 'Request Berhasil diambil.');
+    }
+
+    public function agentdetailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 'request_types.request_type_name', 'requests.status', 'requests.request_date', 'requests.collect_date', 'requests.result', 'requests.result_file', 'requests.note', 'users.name', 'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+        return view('request.agentdetailonprogress', [
+            'title' => "Agent detail onprogress",
+            'data' => $data
+        ]);
     }
 }

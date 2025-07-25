@@ -50,5 +50,6 @@ Route::get('agent-request-available', [RequestController::class, 'agentreqavaila
 Route::get('agent-request-onprogress', [RequestController::class, 'agentreqonprogress'])->middleware(['auth']);
 Route::get('agent-request-complated', [RequestController::class, 'agentreqcomplated'])->middleware(['auth']);
 Route::get('agent-request-available/{id}/asign', [RequestController::class, 'agentasignreq'])->middleware(['auth']);
+Route::get('agent-request-onprogress/{id}/detail', [RequestController::class, 'agentdetailonprogress'])->middleware(['auth']);
 
 
