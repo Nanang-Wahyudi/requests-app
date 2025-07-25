@@ -12,103 +12,259 @@
 
             <div id="session" data-session="{{ session('success') }}"></div>
 
-            <div class="section-body">
+            <div class="container mt-4">
                 <div class="card">
-                <div class="card-body">
-                        <h5>Data Pemohon</h5>
-                        <table>
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Detail Permintaan</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-3">Data Pemohon</h6>
+                        <table class="table table-bordered">
                             <tr>
-                                <td>Nama</td>
-                                <td>:</td>
+                                <th width="30%">Nama</th>
                                 <td>{{$data->name}}</td>
                             </tr>
                             <tr>
-                                <td>Email</td>
-                                <td>:</td>
+                                <th>Email</th>
                                 <td>{{$data->email}}</td>
                             </tr>
                         </table>
-                </div>
 
-                <div class="card-body">
-                        <table>
+                        <h6 class="mb-3">Status Permintaan</h6>
+                        <table class="table table-bordered">
                             <tr>
-                                <td>Status</td>
-                                <td>:</td>
-                                <td>{{$data->status}}</td>
-                            </tr>
+                                <th width="30%">Status</th>
+                                <td>
+                                    @php
+                                        $status = strtolower($data->status);
+                                        $badgeClass = match($status) {
+                                            'waiting' => 'bg-info',
+                                            'on progress' => 'bg-primary',
+                                            'completed' => 'bg-success',
+                                            'rejected' => 'bg-danger',
+                                        };
+                                    @endphp
 
-                             <tr>
-                                <td>Request Type</td>
-                                <td>:</td>
+                                    <span class="badge {{ $badgeClass }} text-white text-capitalize px-3 py-2">
+                                        {{ $data->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <h6 class="mt-4 mb-3">Data Permintaan</h6>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Request Type</th>
                                 <td>{{$data->request_type_name}}</td>
                             </tr>
-                        </table>
-                </div>
 
-                <div class="card-body">
-                        <h5>Data Request</h5>
-                        <table>
+                            @if($data->ticket_url)
                             <tr>
-                                <td>Ticket URL</td>
-                                <td>:</td>
-                                <td>{{$data->ticket_url}}</td>
+                                <th width="30%">Request ID</th>
+                                <td>{{ $data->request_id }}</td>
                             </tr>
+                            @endif
+
+                            @if($data->ticket_url)
                             <tr>
-                                <td>Server Name</td>
-                                <td>:</td>
-                                <td>{{$data->server_name}}</td>
+                                <th width="30%">Ticket URL</th>
+                                <td>{{ $data->ticket_url }}</td>
                             </tr>
+                            @endif
+
+                            @if($data->server_name)
                             <tr>
-                                <td>Current Spec</td>
-                                <td>:</td>
-                                <td>{{$data->current_spec}}</td>
+                                <th>Server Name</th>
+                                <td>{{ $data->server_name }}</td>
                             </tr>
+                            @endif
+
+                            @if($data->current_spec)
                             <tr>
-                                <td>Requested Spec</td>
-                                <td>:</td>
-                                <td>{{$data->requested_spec}}</td>
+                                <th>Current Spec</th>
+                                <td>{{ $data->current_spec }}</td>
                             </tr>
-                             <tr>
-                                <td>Software Version</td>
-                                <td>:</td>
-                                <td>{{$data->software_version}}</td>
-                            </tr>
+                            @endif
+
+                            @if($data->requested_spec)
                             <tr>
-                                <td>Software Name</td>
-                                <td>:</td>
-                                <td>{{$data->software_name}}</td>
+                                <th>Requested Spec</th>
+                                <td>{{ $data->requested_spec }}</td>
                             </tr>
-                             <tr>
-                                <td>File</td>
-                                <td>:</td>
-                                <td><a href="{{  Storage::url($data->file) }}">{{$data->file}}</a></td>
-                            </tr>
-                             <tr>
-                                <td>Service Name</td>
-                                <td>:</td>
-                                <td>{{$data->service_name}}</td>
-                            </tr>
-                             <tr>
-                                <td>Feature</td>
-                                <td>:</td>
-                                <td>{{$data->feature}}</td>
-                            </tr>
+                            @endif
+
+                            @if($data->software_version)
                             <tr>
-                                <td>Source IP</td>
-                                <td>:</td>
-                                <td>{{$data->source_ip}}</td>
+                                <th>Software Version</th>
+                                <td>{{ $data->software_version }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->software_name)
+                            <tr>
+                                <th>Software Name</th>
+                                <td>{{ $data->software_name }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->file)
+                            <tr>
+                                <th>File</th>
+                                <td>
+                                    <a href="{{ Storage::url($data->file) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-download"></i> Download File
+                                    </a>
+                                </td>
+                            </tr>
+                            @endif
+
+                            @if($data->service_name)
+                            <tr>
+                                <th>Service Name</th>
+                                <td>{{ $data->service_name }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->feature)
+                            <tr>
+                                <th>Feature</th>
+                                <td>{{ $data->feature }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->source_ip)
+                            <tr>
+                                <th>Source IP</th>
+                                <td>{{ $data->source_ip }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->destination_ip)
+                            <tr>
+                                <th>Destination IP</th>
+                                <td>{{ $data->destination_ip }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->port)
+                            <tr>
+                                <th>Port</th>
+                                <td>{{ $data->port }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->database_name)
+                            <tr>
+                                <th>Database Name</th>
+                                <td>{{ $data->database_name }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->query)
+                            <tr>
+                                <th>Query</th>
+                                <td>{{ $data->query }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->description)
+                            <tr>
+                                <th>Description</th>
+                                <td>{{ $data->description }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->scan_type)
+                            <tr>
+                                <th>Scan Type</th>
+                                <td>{{ $data->scan_type }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->repository_url)
+                            <tr>
+                                <th>Repository URL</th>
+                                <td>{{ $data->repository_url }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->branch_name)
+                            <tr>
+                                <th>Branch Name</th>
+                                <td>{{ $data->branch_name }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->pr_url)
+                            <tr>
+                                <th>PR URL</th>
+                                <td>{{ $data->pr_url }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->purpose)
+                            <tr>
+                                <th>Purpose</th>
+                                <td>{{ $data->purpose }}</td>
+                            </tr>
+                            @endif
+                        </table>
+
+                        @if($data->result || $data->result_file)
+                        <h6 class="mb-3">Hasil Permintaan</h6>
+                        <table class="table table-bordered">
+                            @if($data->result)
+                            <tr>
+                                <th width="30%">Result</th>
+                                <td>{{ $data->result }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->result_file)
+                            <tr>
+                                <th>Result File</th>
+                                <td>
+                                    <a href="{{ Storage::url($data->result_file) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-download"></i> Download File
+                                    </a>
+                                </td>
+                            </tr>
+                            @endif
+                        </table>
+                        @endif
+
+                        @if($data->note) 
+                        <h6 class="mb-3">Catatan Permintaan</h6>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th width="30%">Note</th>
+                                <td>{{ $data->note }}</td>
                             </tr>
                         </table>
-                </div>
+                        @endif
 
+                        <div class="mt-4 d-flex justify-content-end">
+                            <a href="{{ url('agent-request-onprogress') }}" class="btn btn-secondary">
+                                Back
+                            </a>
+
+                            <form>
+                                <button type="submit" class="btn btn-primary">
+                                    Completed Request
+                                </button>
+                            </form>
+
+                            <form>
+                                <button type="submit" class="btn btn-danger">
+                                    Reject Request
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-
         </section>
-
-
     </div>
 @endsection
 
