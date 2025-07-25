@@ -19,7 +19,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'COMPLATED')
+            ->where('requests.status', 'COMPLETED')
             ->get();
 
             return DataTables::of($data)
@@ -44,7 +44,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'WAITING')
+            ->whereIn('requests.status', ['WAITING', 'ON PROGRESS'])
             ->get();
 
             return DataTables::of($data)
@@ -109,8 +109,7 @@ class RequestController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return "<a href='/agent-request-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>
-                                <a href='/agent-request-available/$row->id/complated' class='btn btn-success btn-sm'>Completed Request</a>";
+                        return "<a href='/agent-request-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
@@ -133,7 +132,7 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
-            ->where('requests.status', 'COMPLATED')
+            ->where('requests.status', 'COMPLETED')
             ->get();
 
             return DataTables::of($data)

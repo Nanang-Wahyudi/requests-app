@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Requests;
-use App\Models\Dbadministrator;
+use App\Models\RequestDetail;
 use Carbon\Carbon;
 
 class DbadministratorController extends Controller
@@ -46,7 +46,7 @@ class DbadministratorController extends Controller
             $req_id = $req->id;
 
             // Simpan ke tabel architecture
-            Dbadministrator::create([
+            RequestDetail::create([
                 'ticket_url' => $request->ticket_url,
                 'database_name' => $request->database_name,
                 'query' => $request->querie,
@@ -76,7 +76,7 @@ class DbadministratorController extends Controller
             $req_id = $req->id;
 
             // Simpan ke tabel architecture
-            Dbadministrator::create([
+            RequestDetail::create([
                 'ticket_url' => $request->ticket_url,
                 'database_name' => $request->database_name,
                 'description' => $request->description,

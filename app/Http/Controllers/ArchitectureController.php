@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Requests;
-use App\Models\Architecture;
+use App\Models\RequestDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -50,7 +50,7 @@ class ArchitectureController extends Controller
             $filePath = $file1->storeAs('document', $filename1, 'public');
 
             // Simpan ke tabel architecture
-            Architecture::create([
+            RequestDetail::create([
                 'ticket_url' => $request->ticket_url,
                 'file' => $filePath,
                 'purpose' => $request->purpose,
@@ -79,9 +79,9 @@ class ArchitectureController extends Controller
             $req_id = $req->id;
 
             // Simpan ke tabel architecture
-            Architecture::create([
+            RequestDetail::create([
                 'service_name' => $request->service_name,
-                'fitur' => $request->fitur,
+                'feature' => $request->fitur,
                 'purpose' => $request->purpose,
                 'request_id' => $req_id,
             ]);

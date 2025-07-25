@@ -28,7 +28,7 @@
 
                                  <div class="col-md-12 mb-3">
                                     <label for="kendaraan" class="form-label">Type Scan</label>
-                                    <select class="form-control" name="type_Scan">
+                                    <select class="form-control" name="scan_type">
                                         <option value="">-Pilih Type Scan-</option>
                                         <option value="SAST">SAST</option>
                                         <option value="DAST">DAST</option>

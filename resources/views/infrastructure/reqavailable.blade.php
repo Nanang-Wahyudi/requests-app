@@ -4,10 +4,10 @@
         <section class="section">
             <div class="section-header">
                 <!-- <h1>{{ $title ?? '' }}</h1> -->
-                 <h1>IT Infrastructure - Request On Progress</h1>
+                 <h1>IT Infrastructure - Request Available</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item">Infrastructure On Progress</div>
+                    <div class="breadcrumb-item">Infrastructure Available</div>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
                         <!-- <div class="mb-3 d-flex justify-content-end gap-3">
                             <a href="{{ route('infrastructure-complated.create') }}" class="btn btn-primary btn-sm ml-2">Tambah data</a>
                         </div> -->
-                        <table id="infraOnProgressTable" class="display">
+                        <table id="infraAvailableTable" class="display">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -27,8 +27,6 @@
                                     <th>Name</th>
                                     <th>Type Request</th>
                                     <th>Tanggal Request</th>
-                                    <th>PIC</th>
-                                    <th>Tanggal Ambil Request</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -67,10 +65,10 @@
             }
 
             // table data
-            $('#infraOnProgressTable').DataTable({
+            $('#infraAvailableTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ url('infrastructure-onprogress') }}",
+                ajax: "{{ url('infrastructure-available') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -92,14 +90,6 @@
                     {
                         data: 'request_date',
                         name: 'request_date'
-                    },
-                    {
-                        data: 'pic',
-                        name: 'pic'
-                    },
-                    {
-                        data: 'collect_date',
-                        name: 'collect_date'
                     },
                     {
                         data: 'status',
