@@ -91,7 +91,7 @@ class InfrastructureController extends Controller
                     }
 
         return view('infrastructure.reqavailable', [
-            'title' => "Infrastructure Waiting"
+            'title' => "Infrastructure Available"
         ]);
     }
 
