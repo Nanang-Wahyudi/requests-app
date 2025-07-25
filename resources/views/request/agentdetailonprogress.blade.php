@@ -250,7 +250,7 @@
                             </a>
 
                             <form>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary mx-1">
                                     Completed Request
                                 </button>
                             </form>
