@@ -26,10 +26,10 @@ class RequestController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $buttons = "<a href='/developer-request-complated/{$row->id}/detail' class='btn btn-primary btn-sm me-1'>Detail</a>";
+                    $buttons = "<a href='/developer-request-complated/{$row->id}/detail' class='btn btn-primary btn-sm'>Detail</a>";
 
                     if ($row->status === 'REJECTED') {
-                        $buttons .= "<a href='/developer-request-complated/{$row->id}/edit' class='btn btn-warning btn-sm'>Edit</a>";
+                        $buttons .= "<a href='/developer-request-complated/{$row->id}/edit' class='btn btn-warning btn-sm ms-1'>Edit</a>";
                     }
 
                     return $buttons;
@@ -61,8 +61,8 @@ class RequestController extends Controller
                         $buttons = "<a href='/developer-request-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                   
                         if ($row->status === 'WAITING') {
-                            $buttons .= "<a href='/developer-request-onprogress/{$row->id}/edit' class='btn btn-warning btn-sm me-1'>Edit</a>";
-                            $buttons .= "<form action='/developer-request-onprogress/{$row->id}/delete' method='POST' style='display:inline-block;'>
+                            $buttons .= "<a href='/developer-request-onprogress/{$row->id}/edit' class='btn btn-warning btn-sm mx-1'>Edit</a>";
+                            $buttons .= "<form action='/developer-request-onprogress/{$row->id}/delete' method='POST' class='d-inline'>
                                             <button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'>Delete</button>
                                         </form>";
                         }
