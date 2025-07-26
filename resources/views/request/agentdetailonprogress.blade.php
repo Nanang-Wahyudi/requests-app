@@ -50,25 +50,39 @@
                                     </span>
                                 </td>
                             </tr>
+
+                            @if($data->request_date)
+                            <tr>
+                                <th>Tanggal Request</th>
+                                <td>{{ $data->request_date }}</td>
+                            </tr>
+                            @endif
+
+                            @if($data->collect_date)
+                            <tr>
+                                <th>Tanggal Ambil Request</th>
+                                <td>{{ $data->collect_date }}</td>
+                            </tr>
+                            @endif
                         </table>
 
                         <h6 class="mt-4 mb-3">Data Permintaan</h6>
                         <table class="table table-bordered">
                             <tr>
-                                <th>Request Type</th>
+                                <th width="30%">Request Type</th>
                                 <td>{{$data->request_type_name}}</td>
                             </tr>
 
                             @if($data->ticket_url)
                             <tr>
-                                <th width="30%">Request ID</th>
+                                <th>Request ID</th>
                                 <td>{{ $data->request_id }}</td>
                             </tr>
                             @endif
 
                             @if($data->ticket_url)
                             <tr>
-                                <th width="30%">Ticket URL</th>
+                                <th>Ticket URL</th>
                                 <td>{{ $data->ticket_url }}</td>
                             </tr>
                             @endif
@@ -223,7 +237,7 @@
 
                             @if($data->result_file)
                             <tr>
-                                <th>Result File</th>
+                                <th width="30%">Result File</th>
                                 <td>
                                     <a href="{{ Storage::url($data->result_file) }}" target="_blank" class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-download"></i> Download File
