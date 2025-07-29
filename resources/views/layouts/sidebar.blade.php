@@ -76,13 +76,13 @@
                             aria-hidden="true"></i>
                         <span>DevSecOps</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Completed</a></li>
+                        <li><a class="nav-link" href="{{ url('devsecops-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('devsecops-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('devsecops-available') }}">Request Available</a></li>
                     </ul>
                 </li>
                 <li

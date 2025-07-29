@@ -30,6 +30,9 @@ Route::get('network-available', [NetworkController::class, 'reqavailable'])->mid
 Route::get('architecture-completed', [ArchitectureController::class, 'reqcompleted'])->middleware(['auth']);
 Route::get('architecture-onprogress', [ArchitectureController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('architecture-available', [ArchitectureController::class, 'reqavailable'])->middleware(['auth']);
+Route::get('devsecops-available', [DevsecopsController::class, 'reqavailable'])->middleware(['auth']);
+Route::get('devsecops-onprogress', [DevsecopsController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('devsecops-completed', [DevsecopsController::class, 'reqcompleted'])->middleware(['auth']);
 Route::get('form-spec-upgrade', [InfrastructureController::class, 'formspecup'])->middleware(['auth']);
 Route::get('form-soft-install', [InfrastructureController::class, 'formsoftinstall'])->middleware(['auth']);
 Route::get('form-address-ip', [NetworkController::class, 'formaddressip'])->middleware(['auth']);
