@@ -61,13 +61,13 @@
                             aria-hidden="true"></i>
                         <span>IT Architecture</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Completed</a></li>
+                        <li><a class="nav-link" href="{{ url('architecture-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('architecture-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('architecture-available') }}">Request Available</a></li>
                     </ul>
                 </li>
                 <li
