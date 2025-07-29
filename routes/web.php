@@ -25,6 +25,8 @@ Route::resource('infrastructure-complated', InfrastructureController::class)->mi
 Route::get('infrastructure-onprogress', [InfrastructureController::class, 'onprogress'])->middleware(['auth']);
 Route::get('infrastructure-available', [InfrastructureController::class, 'available'])->middleware(['auth']);
 Route::get('network-completed', [NetworkController::class, 'reqcompleted'])->middleware(['auth']);
+Route::get('network-onprogress', [NetworkController::class, 'reqonprogress'])->middleware(['auth']);
+Route::get('network-available', [NetworkController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('form-spec-upgrade', [InfrastructureController::class, 'formspecup'])->middleware(['auth']);
 Route::get('form-soft-install', [InfrastructureController::class, 'formsoftinstall'])->middleware(['auth']);
 Route::get('form-address-ip', [NetworkController::class, 'formaddressip'])->middleware(['auth']);

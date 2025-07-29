@@ -49,10 +49,10 @@
                         <li><a class="nav-link" href="{{ url('network-completed') }}">Request Completed</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request On Progress</a></li>
+                        <li><a class="nav-link" href="{{ url('network-onprogress') }}">Request On Progress</a></li>
                     </ul>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="">Request Available</a></li>
+                        <li><a class="nav-link" href="{{ url('network-available') }}">Request Available</a></li>
                     </ul>
                 </li>
                 <li
