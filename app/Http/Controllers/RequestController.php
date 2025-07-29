@@ -165,7 +165,7 @@ class RequestController extends Controller
                     }
 
         return view('request.agentreqcomplated', [
-            'title' => "Requests Complated"
+            'title' => "Requests Completed"
         ]);
     }
 

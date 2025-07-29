@@ -24,6 +24,7 @@ Route::post('/users/{user}/update-role', [UserController::class, 'updateRole'])-
 Route::resource('infrastructure-complated', InfrastructureController::class)->middleware(['auth']);
 Route::get('infrastructure-onprogress', [InfrastructureController::class, 'onprogress'])->middleware(['auth']);
 Route::get('infrastructure-available', [InfrastructureController::class, 'available'])->middleware(['auth']);
+Route::get('network-completed', [NetworkController::class, 'reqcompleted'])->middleware(['auth']);
 Route::get('form-spec-upgrade', [InfrastructureController::class, 'formspecup'])->middleware(['auth']);
 Route::get('form-soft-install', [InfrastructureController::class, 'formsoftinstall'])->middleware(['auth']);
 Route::get('form-address-ip', [NetworkController::class, 'formaddressip'])->middleware(['auth']);

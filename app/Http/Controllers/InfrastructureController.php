@@ -37,7 +37,7 @@ class InfrastructureController extends Controller
                     }
 
         return view('infrastructure.index', [
-            'title' => "Infrastructure Complated"
+            'title' => "Infrastructure Completed"
         ]);
     }
 
