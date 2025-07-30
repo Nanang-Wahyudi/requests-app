@@ -160,7 +160,7 @@ class RequestController extends Controller
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return "<a href='/agent-request-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                        return "<a href='/agent-request-complated/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
@@ -174,7 +174,7 @@ class RequestController extends Controller
     public function agentasignreq($id)
     {
         $userpic = auth()->user()->name;
-         $tgl = Carbon::now();
+        $tgl = Carbon::now();
         $tgl_now = $tgl->format('Y-m-d');
         DB::table('requests')
             ->where('id', $id)
@@ -193,8 +193,12 @@ class RequestController extends Controller
         $isSkipped = ($request->input('skip') === 'true');
 
         try {
+            $tgl = Carbon::now();
+            $tgl_now = $tgl->format('Y-m-d');
+
             $requestToUpdate = Requests::findOrFail($requestId);
             $requestToUpdate->status = 'COMPLETED';
+            $requestToUpdate->complated_date = $tgl_now;
             $requestToUpdate->save();
 
             return response()->json(['message' => 'Request successfully marked as completed without result.'], 200);
@@ -209,8 +213,12 @@ class RequestController extends Controller
         $requestId = $request->input('id');
 
         try {
+            $tgl = Carbon::now();
+            $tgl_now = $tgl->format('Y-m-d');
+
             $requestToUpdate = Requests::findOrFail($requestId);
             $requestToUpdate->status = 'COMPLETED';
+            $requestToUpdate->complated_date = $tgl_now;
             $requestToUpdate->result = $request->result;
 
             if ($request->hasFile('file')) {
@@ -234,8 +242,12 @@ class RequestController extends Controller
         $requestId = $request->input('id');
 
         try {
+            $tgl = Carbon::now();
+            $tgl_now = $tgl->format('Y-m-d');
+
             $requestToUpdate = Requests::findOrFail($requestId);
             $requestToUpdate->status = 'REJECTED';
+            $requestToUpdate->complated_date = $tgl_now;
             $requestToUpdate->note = $request->note;
             $requestToUpdate->save();
 
@@ -286,6 +298,35 @@ class RequestController extends Controller
             ->first();
         return view('request.agentdetailavailable', [
             'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function agentdetailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('request.agentdetailcompleted', [
+            'title' => "Detail Request Completed",
             'data' => $data
         ]);
     }
