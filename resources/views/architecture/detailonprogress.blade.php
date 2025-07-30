@@ -6,6 +6,7 @@
                 <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
+                    <div class="breadcrumb-item"><a href="{{ url('architecture-onprogress') }}">Architecture On Progress</a></div>
                     <div class="breadcrumb-item">Request Detail</div>
                 </div>
             </div>
@@ -30,8 +31,7 @@
                             </tr>
                         </table>
 
-                        @if($data->pic_name || $data->pic_email)
-                        <h6 class="mb-3">Data Penanggung Jawab</h6>
+                         <h6 class="mb-3">Data Penanggung Jawab</h6>
                         <table class="table table-bordered">
                             <tr>
                                 <th width="30%">Name</th>
@@ -42,7 +42,6 @@
                                 <td>{{$data->pic_email}}</td>
                             </tr>
                         </table>
-                        @endif
 
                         <h6 class="mb-3">Status Permintaan</h6>
                         <table class="table table-bordered">
@@ -70,12 +69,10 @@
                                 <td>{{ $data->request_date }}</td>
                             </tr>
 
-                            @if($data->collect_date )
                             <tr>
                                 <th>Tanggal Ambil Request</th>
                                 <td>{{ $data->collect_date }}</td>
                             </tr>
-                            @endif
                         </table>
 
                         <h6 class="mt-4 mb-3">Data Permintaan</h6>
@@ -238,7 +235,7 @@
                         </table>
 
                         <div class="mt-4 d-flex justify-content-end">
-                            <a href="{{ url('developer-request-onprogress') }}" class="btn btn-secondary">
+                            <a href="{{ url('architecture-onprogress') }}" class="btn btn-secondary">
                                 Back
                             </a>
                         </div>

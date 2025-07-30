@@ -94,6 +94,52 @@ class ArchitectureController extends Controller
         ]);
     }
 
+      public function detailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->leftJoin('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('architecture.detailonprogress', [
+            'title' => "Detail Request On Progress",
+            'data' => $data
+        ]);
+    }
+
+    public function detailavailable($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'users.name', 
+                    'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+            
+        return view('architecture.detailavailable', [
+            'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
      public function formreviewarch()
     {
         $reqtypes = DB::table('request_types')->get();

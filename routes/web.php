@@ -34,6 +34,8 @@ Route::get('network-available/{id}/detail', [NetworkController::class, 'detailav
 Route::get('architecture-completed', [ArchitectureController::class, 'reqcompleted'])->middleware(['auth']);
 Route::get('architecture-onprogress', [ArchitectureController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('architecture-available', [ArchitectureController::class, 'reqavailable'])->middleware(['auth']);
+Route::get('architecture-onprogress/{id}/detail', [ArchitectureController::class, 'detailonprogress'])->middleware(['auth']);
+Route::get('architecture-available/{id}/detail', [ArchitectureController::class, 'detailavailable'])->middleware(['auth']);
 Route::get('devsecops-available', [DevsecopsController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('devsecops-onprogress', [DevsecopsController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('devsecops-completed', [DevsecopsController::class, 'reqcompleted'])->middleware(['auth']);
