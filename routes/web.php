@@ -39,6 +39,8 @@ Route::get('architecture-available/{id}/detail', [ArchitectureController::class,
 Route::get('devsecops-available', [DevsecopsController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('devsecops-onprogress', [DevsecopsController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('devsecops-completed', [DevsecopsController::class, 'reqcompleted'])->middleware(['auth']);
+Route::get('devsecops-onprogress/{id}/detail', [DevsecopsController::class, 'detailonprogress'])->middleware(['auth']);
+Route::get('devsecops-available/{id}/detail', [DevsecopsController::class, 'detailavailable'])->middleware(['auth']);
 Route::get('dbadministrator-completed', [DbadministratorController::class, 'reqcompleted'])->middleware(['auth']);
 Route::get('dbadministrator-onprogress', [DbadministratorController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('dbadministrator-available', [DbadministratorController::class, 'reqavailable'])->middleware(['auth']);
