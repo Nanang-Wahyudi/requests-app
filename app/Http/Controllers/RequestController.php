@@ -222,7 +222,7 @@ class RequestController extends Controller
             }
             $requestToUpdate->save();
 
-            return redirect('agent-request-onprogress')->with('success', 'Request Berhasil diselesaikan.');
+            return redirect('agent-request-complated')->with('success', 'Request Berhasil diselesaikan.');
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
@@ -239,7 +239,7 @@ class RequestController extends Controller
             $requestToUpdate->note = $request->note;
             $requestToUpdate->save();
 
-            return redirect('agent-request-onprogress')->with('success', 'Request Berhasil Ditolak.');
+            return redirect('agent-request-complated')->with('success', 'Request Berhasil Ditolak.');
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);

@@ -362,7 +362,7 @@
                                 timer: 2000,
                                 showConfirmButton: false
                             }).then(() => {
-                                window.location.href = "{{ url('agent-request-onprogress') }}";
+                                window.location.href = "{{ url('agent-request-complated') }}";
                             });
                         },
                         error: function (xhr, status, error) {
