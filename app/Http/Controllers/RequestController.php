@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Requests;
 
 class RequestController extends Controller
 {
@@ -183,6 +185,23 @@ class RequestController extends Controller
             ]);
 
         return redirect('agent-request-onprogress')->with('success', 'Request Berhasil diambil.');
+    }
+
+    public function completeRequestSkip(Request $request)
+    {
+        $requestId = $request->input('id');
+        $isSkipped = ($request->input('skip') === 'true');
+
+        try {
+            $requestToUpdate = Requests::findOrFail($requestId);
+            $requestToUpdate->status = 'COMPLETED';
+            $requestToUpdate->save();
+
+            return response()->json(['message' => 'Request successfully marked as completed without result.'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
+        }
     }
 
     public function agentdetailonprogress($id)

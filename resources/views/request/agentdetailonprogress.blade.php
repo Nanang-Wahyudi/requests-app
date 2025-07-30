@@ -238,17 +238,13 @@
                                 Back
                             </a>
 
-                            <form>
-                                <button type="submit" class="btn btn-primary mx-1">
-                                    Completed Request
-                                </button>
-                            </form>
+                            <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#completeModal">
+                                Completed Request
+                            </button>
 
-                            <form>
-                                <button type="submit" class="btn btn-danger">
-                                    Reject Request
-                                </button>
-                            </form>
+                            <button type="submit" class="btn btn-danger">
+                                Reject Request
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -257,8 +253,99 @@
     </div>
 @endsection
 
+<!-- Modal Complete Request -->
+<div class="modal fade" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="completeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="completeRequestForm" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id" value="{{ $data->id }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeModalLabel">Complete Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="result">Result</label>
+                    <textarea name="result" id="result" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="result_file">Result File</label>
+                    <input type="file" name="result_file" id="result_file" class="form-control-file">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" id="skipComplete" class="btn btn-warning">Skip</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
 
 
 @push('script')
+<script>
+    $(document).ready(function() {
+        $('#skipComplete').on('click', function () {
+            const id = $('input[name="id"]').val(); 
+            const token = $('meta[name="csrf-token"]').attr('content');
 
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to mark this request as COMPLETED without adding any result. This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, skip it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('request-complete-skip') }}",
+                        type: 'POST',
+                        data: {
+                            _token: token,
+                            id: id,    
+                            skip: 'true'
+                        },
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: 'Processing...',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        },
+                        success: function (response) {
+                            $('#completeModal').modal('hide'); 
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Completed!',
+                                text: response.message || 'The request was marked as completed without a result.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = "{{ url('agent-request-onprogress') }}";
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed',
+                                text: xhr.responseJSON.message || 'Something went wrong while skipping the result.',
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endpush

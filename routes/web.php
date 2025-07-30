@@ -75,4 +75,4 @@ Route::get('agent-request-complated', [RequestController::class, 'agentreqcompla
 Route::get('agent-request-available/{id}/asign', [RequestController::class, 'agentasignreq'])->middleware(['auth']);
 Route::get('agent-request-onprogress/{id}/detail', [RequestController::class, 'agentdetailonprogress'])->middleware(['auth']);
 Route::get('agent-request-available/{id}/detail', [RequestController::class, 'agentdetailavailable'])->middleware(['auth']);
-
+Route::post('request-complete-skip', [RequestController::class, 'completeRequestSkip'])->middleware(['auth']);
