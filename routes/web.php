@@ -77,3 +77,4 @@ Route::get('agent-request-onprogress/{id}/detail', [RequestController::class, 'a
 Route::get('agent-request-available/{id}/detail', [RequestController::class, 'agentdetailavailable'])->middleware(['auth']);
 Route::post('request-complete-skip', [RequestController::class, 'completeRequestSkip'])->middleware(['auth']);
 Route::post('request-complete-submit', [RequestController::class, 'completeRequestSubmit'])->middleware(['auth']);
+Route::post('request-reject', [RequestController::class, 'rejectRequest'])->middleware(['auth']);

@@ -229,6 +229,23 @@ class RequestController extends Controller
         }
     }
 
+    public function rejectRequest(Request $request)
+    {
+        $requestId = $request->input('id');
+
+        try {
+            $requestToUpdate = Requests::findOrFail($requestId);
+            $requestToUpdate->status = 'REJECTED';
+            $requestToUpdate->note = $request->note;
+            $requestToUpdate->save();
+
+            return redirect('agent-request-onprogress')->with('success', 'Request Berhasil Ditolak.');
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function agentdetailonprogress($id)
     {
         $data = DB::table('requests')

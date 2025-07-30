@@ -242,7 +242,7 @@
                                 Completed Request
                             </button>
 
-                            <button type="submit" class="btn btn-danger">
+                            <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#rejectModal">
                                 Reject Request
                             </button>
                         </div>
@@ -280,8 +280,38 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
                 <button type="button" id="skipComplete" class="btn btn-warning">Skip</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Reject Request -->
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="rejectRequestForm" action="{{url('request-reject')}}" method="post" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="id" value="{{ $data->id }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">Reject Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="note">Note</label>
+                    <textarea name="note" id="note" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </form>
