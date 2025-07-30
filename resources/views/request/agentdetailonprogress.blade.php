@@ -256,7 +256,7 @@
 <!-- Modal Complete Request -->
 <div class="modal fade" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="completeModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <form id="completeRequestForm" enctype="multipart/form-data">
+    <form id="completeRequestForm" action="{{url('request-complete-submit')}}" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id" value="{{ $data->id }}">
         <div class="modal-content">
@@ -270,11 +270,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="result">Result</label>
-                    <textarea name="result" id="result" class="form-control" required></textarea>
+                    <textarea name="result" id="result" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="result_file">Result File</label>
-                    <input type="file" name="result_file" id="result_file" class="form-control-file">
+                    <input type="file" name="file" id="file" class="form-control-file">
                 </div>
             </div>
 

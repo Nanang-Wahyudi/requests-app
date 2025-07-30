@@ -204,6 +204,31 @@ class RequestController extends Controller
         }
     }
 
+    public function completeRequestSubmit(Request $request)
+    {
+        $requestId = $request->input('id');
+
+        try {
+            $requestToUpdate = Requests::findOrFail($requestId);
+            $requestToUpdate->status = 'COMPLETED';
+            $requestToUpdate->result = $request->result;
+
+            if ($request->hasFile('file')) {
+
+                $file1 = $request->file('file');
+                $filename1 = uniqid() . '.' . $file1->getClientOriginalExtension();
+                $filePath = $file1->storeAs('document', $filename1, 'public');
+                $requestToUpdate->result_file = $filePath;
+            }
+            $requestToUpdate->save();
+
+            return redirect('agent-request-onprogress')->with('success', 'Request Berhasil diselesaikan.');
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function agentdetailonprogress($id)
     {
         $data = DB::table('requests')

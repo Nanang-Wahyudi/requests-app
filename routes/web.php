@@ -76,3 +76,4 @@ Route::get('agent-request-available/{id}/asign', [RequestController::class, 'age
 Route::get('agent-request-onprogress/{id}/detail', [RequestController::class, 'agentdetailonprogress'])->middleware(['auth']);
 Route::get('agent-request-available/{id}/detail', [RequestController::class, 'agentdetailavailable'])->middleware(['auth']);
 Route::post('request-complete-skip', [RequestController::class, 'completeRequestSkip'])->middleware(['auth']);
+Route::post('request-complete-submit', [RequestController::class, 'completeRequestSubmit'])->middleware(['auth']);
