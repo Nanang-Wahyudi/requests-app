@@ -55,7 +55,7 @@
                                     <h4>Request Completed</h4>
                                 </div>
                                 <div class="card-body">
-                                    {{ $complated }}
+                                    {{ $completed }}
                                 </div>
                                 </div>
                             </div>
@@ -102,8 +102,8 @@
             labels: {!! json_encode($bulanList) !!},
             datasets: [
                 {
-                    label: 'Complated',
-                    data: {!! json_encode(array_values($statusData['complated'])) !!},
+                    label: 'Completed',
+                    data: {!! json_encode(array_values($statusData['completed'])) !!},
                     backgroundColor: 'rgba(75, 192, 192, 0.7)'
                 },
                 {
