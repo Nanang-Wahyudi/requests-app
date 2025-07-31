@@ -94,12 +94,12 @@ class ArchitectureController extends Controller
         ]);
     }
 
-      public function detailonprogress($id)
+    public function detailonprogress($id)
     {
         $data = DB::table('requests')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
-            ->leftJoin('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
             ->join('request_details', 'requests.id', '=', 'request_details.request_id')
             ->select('request_details.*', 
                     'request_types.request_type_name', 
