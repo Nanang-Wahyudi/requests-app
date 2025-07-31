@@ -38,6 +38,7 @@ Route::get('architecture-onprogress', [ArchitectureController::class, 'reqonprog
 Route::get('architecture-available', [ArchitectureController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('architecture-onprogress/{id}/detail', [ArchitectureController::class, 'detailonprogress'])->middleware(['auth']);
 Route::get('architecture-available/{id}/detail', [ArchitectureController::class, 'detailavailable'])->middleware(['auth']);
+Route::get('architecture-completed/{id}/detail', [ArchitectureController::class, 'detailcompleted'])->middleware(['auth']);
 Route::get('devsecops-available', [DevsecopsController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('devsecops-onprogress', [DevsecopsController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('devsecops-completed', [DevsecopsController::class, 'reqcompleted'])->middleware(['auth']);
