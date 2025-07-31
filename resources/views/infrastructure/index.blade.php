@@ -28,8 +28,8 @@
                                     <th>Tanggal Request</th>
                                     <th>PIC</th>
                                     <th>Tanggal Ambil Request</th>
-                                    <th>Status</th>
                                     <th>Tanggal Menyelesaikan Request</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -102,12 +102,12 @@
                         name: 'collect_date'
                     },
                     {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
                         data: 'complated_date',
                         name: 'complated_date'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'action',

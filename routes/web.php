@@ -26,6 +26,7 @@ Route::get('infrastructure-onprogress', [InfrastructureController::class, 'onpro
 Route::get('infrastructure-available', [InfrastructureController::class, 'available'])->middleware(['auth']);
 Route::get('infrastructure-onprogress/{id}/detail', [InfrastructureController::class, 'detailonprogress'])->middleware(['auth']);
 Route::get('infrastructure-available/{id}/detail', [InfrastructureController::class, 'detailavailable'])->middleware(['auth']);
+Route::get('infrastructure-complated/{id}/detail', [InfrastructureController::class, 'detailcompleted'])->middleware(['auth']);
 Route::get('network-completed', [NetworkController::class, 'reqcompleted'])->middleware(['auth']);
 Route::get('network-onprogress', [NetworkController::class, 'reqonprogress'])->middleware(['auth']);
 Route::get('network-available', [NetworkController::class, 'reqavailable'])->middleware(['auth']);

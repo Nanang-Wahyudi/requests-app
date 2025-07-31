@@ -100,7 +100,7 @@ class InfrastructureController extends Controller
         $data = DB::table('requests')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
-            ->leftJoin('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
             ->join('request_details', 'requests.id', '=', 'request_details.request_id')
             ->select('request_details.*', 
                     'request_types.request_type_name', 
@@ -136,6 +136,35 @@ class InfrastructureController extends Controller
             ->first();
         return view('infrastructure.detailavailable', [
             'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function detailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('infrastructure.detailcompleted', [
+            'title' => "Detail Request Completed",
             'data' => $data
         ]);
     }
