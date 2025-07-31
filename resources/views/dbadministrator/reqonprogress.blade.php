@@ -23,11 +23,11 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Id Request</th>
-                                    <th>Name</th>
+                                    <th>Nama Pemohon</th>
                                     <th>Type Request</th>
-                                    <th>Tanggal Request</th>
+                                    <th>Request Date</th>
                                     <th>PIC</th>
-                                    <th>Tanggal Ambil Request</th>
+                                    <th>Collect Date</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
