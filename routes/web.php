@@ -50,6 +50,7 @@ Route::get('dbadministrator-onprogress', [DbadministratorController::class, 'req
 Route::get('dbadministrator-available', [DbadministratorController::class, 'reqavailable'])->middleware(['auth']);
 Route::get('dbadministrator-onprogress/{id}/detail', [DbadministratorController::class, 'detailonprogress'])->middleware(['auth']);
 Route::get('dbadministrator-available/{id}/detail', [DbadministratorController::class, 'detailavailable'])->middleware(['auth']);
+Route::get('dbadministrator-completed/{id}/detail', [DbadministratorController::class, 'detailcompleted'])->middleware(['auth']);
 Route::get('form-spec-upgrade', [InfrastructureController::class, 'formspecup'])->middleware(['auth']);
 Route::get('form-soft-install', [InfrastructureController::class, 'formsoftinstall'])->middleware(['auth']);
 Route::get('form-address-ip', [NetworkController::class, 'formaddressip'])->middleware(['auth']);
