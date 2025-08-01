@@ -31,7 +31,7 @@ class RequestController extends Controller
                     $buttons = "<a href='/developer-request-complated/{$row->id}/detail' class='btn btn-primary btn-sm'>Detail</a>";
 
                     if ($row->status === 'REJECTED') {
-                        $buttons .= "<a href='/developer-request-complated/{$row->id}/edit' class='btn btn-warning btn-sm ml-1'>Edit</a>";
+                        $buttons .= "<a href='/developer-request-complated/{$row->id}/update' class='btn btn-warning btn-sm ml-1'>Edit</a>";
                     }
 
                     return $buttons;
@@ -399,6 +399,74 @@ class RequestController extends Controller
     }
 
     public function devProsesUpdateRequestOnProgress(Request $request, $id)
+    {
+        $filePath = null;
+
+        if ($request->hasFile('file')) {
+            $file1 = $request->file('file');
+            $filename1 = uniqid() . '.' . $file1->getClientOriginalExtension();
+            $filePath = $file1->storeAs('document', $filename1, 'public');
+        }
+
+        $updateData = [
+            'ticket_url' => $request->ticket_url,
+            'server_name' => $request->server_name,
+            'current_spec' => $request->current_spec,
+            'requested_spec' => $request->requested_spec,
+            'software_name' => $request->software_name,
+            'software_version' => $request->software_version,
+            'service_name' => $request->service_name,
+            'feature' => $request->fitur,
+            'source_ip' => $request->source_ip,
+            'destination_ip' => $request->destination_ip,
+            'port' => $request->port,
+            'database_name' => $request->database_name,
+            'query' => $request->querie,
+            'description' => $request->description,
+            'scan_type' => $request->scan_type,
+            'repository_url' => $request->repository_url,
+            'branch_name' => $request->branch_name,
+            'pr_url' => $request->pr_url,
+            'purpose' => $request->purpose,
+        ];
+
+        if ($filePath !== null) {
+            $updateData['file'] = $filePath;
+        }
+
+        DB::table('request_details')->where('request_id', $id)->update($updateData);
+
+        $tgl = Carbon::now();
+        $tgl_now = $tgl->format('Y-m-d');
+
+        DB::table('requests')->where('id', $id)->update([
+            'status' => 'WAITING',
+            'request_date' => $tgl_now,
+            'pic' => null,
+            'collect_date' => null,
+            'complated_date' => null,
+            'note' => null,
+            'request_type_id' => $request->req_id,
+        ]);
+
+        return redirect('developer-request-onprogress')->with('success', 'Request berhasil diperbarui.');
+    }
+
+    public function devUpdateRequestCompleted($id)
+    {
+        $data = DB::table('request_details')->where('request_id', $id)->first();
+
+        $reqtypes = DB::table('request_types')->get();
+
+        return view('request.deveditreqcompleted', [
+            'requestId' => $id,
+            'data' => $data,
+            'reqtypes' => $reqtypes,
+            'title' => 'Update Request'
+        ]);
+    }
+
+    public function devProsesUpdateRequestCompleted(Request $request, $id)
     {
         $filePath = null;
 

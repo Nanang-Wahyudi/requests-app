@@ -67,6 +67,8 @@ Route::get('developer-request-onprogress/{id}/detail', [RequestController::class
 Route::get('developer-request-complated/{id}/detail', [RequestController::class, 'devdetailcompleted'])->middleware(['auth']);
 Route::get('developer-request-onprogress/{id}/update', [RequestController::class, 'devUpdateRequestOnProgress'])->middleware(['auth']);
 Route::put('developer-request-onprogress/{id}/proses', [RequestController::class, 'devProsesUpdateRequestOnProgress'])->middleware(['auth']);
+Route::get('developer-request-complated/{id}/update', [RequestController::class, 'devUpdateRequestCompleted'])->middleware(['auth']);
+Route::put('developer-request-complated/{id}/proses', [RequestController::class, 'devProsesUpdateRequestCompleted'])->middleware(['auth']);
 Route::post('proses-formspec', [InfrastructureController::class, 'saveformspec'])->middleware(['auth']);
 Route::post('proses-formsoft', [InfrastructureController::class, 'saveformsoft'])->middleware(['auth']);
 Route::post('proses-formipaddress', [NetworkController::class, 'saveformipaddress'])->middleware(['auth']);
