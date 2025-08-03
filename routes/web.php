@@ -21,6 +21,8 @@ Route::resource('roles', RoleController::class)->middleware(['auth']);
 Route::resource('requesttypes', RequesttypeController::class)->middleware(['auth']);
 Route::resource('users', UserController::class)->middleware(['auth']);
 Route::post('/users/{user}/update-role', [UserController::class, 'updateRole'])->name('users.updateRole')->middleware(['auth']);
+Route::get('/users/change-password', [UserController::class, 'formchangepassword'])->middleware(['auth']);
+Route::post('/users/change-password/process', [UserController::class, 'processchangepassword'])->middleware(['auth']);
 Route::resource('infrastructure-complated', InfrastructureController::class)->middleware(['auth']);
 Route::get('infrastructure-onprogress', [InfrastructureController::class, 'onprogress'])->middleware(['auth']);
 Route::get('infrastructure-available', [InfrastructureController::class, 'available'])->middleware(['auth']);
