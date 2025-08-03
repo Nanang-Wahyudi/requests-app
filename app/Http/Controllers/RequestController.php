@@ -10,6 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Requests;
+use App\Models\RequestDetail;
 
 class RequestController extends Controller
 {
@@ -64,9 +65,7 @@ class RequestController extends Controller
                   
                         if ($row->status === 'WAITING') {
                             $buttons .= "<a href='/developer-request-onprogress/{$row->id}/update' class='btn btn-warning btn-sm ml-1'>Edit</a>";
-                            $buttons .= "<form action='/developer-request-onprogress/{$row->id}/delete' method='POST' class='d-inline'>
-                                            <button type='submit' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'>Delete</button>
-                                        </form>";
+                            $buttons .= "<button type='button' class='btn btn-danger btn-sm ml-1 btn-delete-request' data-id='{$row->id}'>Delete</button>";
                         }
 
                         return $buttons;
@@ -518,5 +517,16 @@ class RequestController extends Controller
         ]);
 
         return redirect('developer-request-onprogress')->with('success', 'Request berhasil diperbarui.');
+    }
+
+    public function devdeleterequest($id)
+    {
+        $request = Requests::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+
+        RequestDetail::where('request_id', $id)->delete();
+
+        $request->delete();
+
+        return redirect()->back()->with('success', 'Request berhasil dihapus.');
     }
 }
