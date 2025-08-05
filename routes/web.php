@@ -11,6 +11,7 @@ use App\Http\Controllers\NetworkController;
 use App\Http\Controllers\ArchitectureController;
 use App\Http\Controllers\DevsecopsController;
 use App\Http\Controllers\DbadministratorController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -92,3 +93,5 @@ Route::get('agent-request-complated/{id}/detail', [RequestController::class, 'ag
 Route::post('request-complete-skip', [RequestController::class, 'completeRequestSkip'])->middleware(['auth']);
 Route::post('request-complete-submit', [RequestController::class, 'completeRequestSubmit'])->middleware(['auth']);
 Route::post('request-reject', [RequestController::class, 'rejectRequest'])->middleware(['auth']);
+Route::get('/notifications', [NotificationController::class, 'fetch'])->name('notifications');
+Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');

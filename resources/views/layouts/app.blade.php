@@ -6,6 +6,10 @@
 <body>
     <div id="app">
         <div class="main-wrapper">
+            @php
+                $notifications = \App\Models\Requests::where('is_read', false)->limit(5)->get();
+            @endphp
+
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
                 <form class="form-inline mr-auto">
@@ -19,20 +23,40 @@
                 </form>
                 <ul class="navbar-nav navbar-right">
 
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
-                        <div class="dropdown-menu dropdown-list dropdown-menu-right">
-                            <div class="dropdown-header">Notifications
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
-                            </div>
-
-                            <div class="dropdown-footer text-center">
-                                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+                    <li class="dropdown dropdown-list-toggle">
+                    <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep">
+                        <i class="far fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                        <div class="dropdown-header">Notifications
+                            <div class="float-right">
+                                <form action="{{ route('notifications.markAllRead') }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-link">Mark All As Read</button>
+                                </form>
                             </div>
                         </div>
+
+                    <div class="dropdown-list-content dropdown-list-icons">
+                                @forelse($notifications as $notif)
+                                    <a href="#" class="dropdown-item dropdown-item-unread">
+                                        <div class="dropdown-item-icon bg-primary text-white">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="dropdown-item-desc">
+                                            {{ $notif->title ?? 'New Request' }}
+                                            <div class="time text-primary">{{ $notif->request_date }}</div>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="dropdown-item">No new notifications</div>
+                                @endforelse
+                            </div>
+
+                        </div>
                     </li>
+
+
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
