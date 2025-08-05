@@ -6,7 +6,7 @@
                 <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item">Infrastructure Complated</div>
+                    <div class="breadcrumb-item">Database Administrator Available</div>
                 </div>
             </div>
 
@@ -18,7 +18,7 @@
                         <!-- <div class="mb-3 d-flex justify-content-end gap-3">
                             <a href="{{ route('infrastructure-complated.create') }}" class="btn btn-primary btn-sm ml-2">Tambah data</a>
                         </div> -->
-                        <table id="infracomplatedTable" class="display">
+                        <table id="dbaAvailableTable" class="display">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -26,9 +26,6 @@
                                     <th>Nama Pemohon</th>
                                     <th>Type Request</th>
                                     <th>Request Date</th>
-                                    <th>PIC</th>
-                                    <th>Collect Date</th>
-                                    <th>Complated Date</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -67,10 +64,10 @@
             }
 
             // table data
-            $('#infracomplatedTable').DataTable({
+            $('#dbaAvailableTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('infrastructure-complated.index') }}",
+                ajax: "{{ url('dbadministrator-available') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -92,18 +89,6 @@
                     {
                         data: 'request_date',
                         name: 'request_date'
-                    },
-                    {
-                        data: 'pic',
-                        name: 'pic'
-                    },
-                    {
-                        data: 'collect_date',
-                        name: 'collect_date'
-                    },
-                    {
-                        data: 'complated_date',
-                        name: 'complated_date'
                     },
                     {
                         data: 'status',

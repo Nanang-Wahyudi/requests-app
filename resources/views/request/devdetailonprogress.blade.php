@@ -30,7 +30,8 @@
                             </tr>
                         </table>
 
-                         <h6 class="mb-3">Data Penanggung Jawab</h6>
+                        @if($data->pic_name || $data->pic_email)
+                        <h6 class="mb-3">Data Penanggung Jawab</h6>
                         <table class="table table-bordered">
                             <tr>
                                 <th width="30%">Name</th>
@@ -41,6 +42,7 @@
                                 <td>{{$data->pic_email}}</td>
                             </tr>
                         </table>
+                        @endif
 
                         <h6 class="mb-3">Status Permintaan</h6>
                         <table class="table table-bordered">
@@ -68,10 +70,12 @@
                                 <td>{{ $data->request_date }}</td>
                             </tr>
 
+                            @if($data->collect_date )
                             <tr>
                                 <th>Tanggal Ambil Request</th>
                                 <td>{{ $data->collect_date }}</td>
                             </tr>
+                            @endif
                         </table>
 
                         <h6 class="mt-4 mb-3">Data Permintaan</h6>
@@ -234,17 +238,9 @@
                         </table>
 
                         <div class="mt-4 d-flex justify-content-end">
-                            <a href="{{ url('agent-request-onprogress') }}" class="btn btn-secondary">
+                            <a href="{{ url('developer-request-onprogress') }}" class="btn btn-secondary">
                                 Back
                             </a>
-
-                            <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#completeModal">
-                                Completed Request
-                            </button>
-
-                            <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#rejectModal">
-                                Reject Request
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -253,129 +249,8 @@
     </div>
 @endsection
 
-<!-- Modal Complete Request -->
-<div class="modal fade" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="completeModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form id="completeRequestForm" action="{{url('request-complete-submit')}}" method="post" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="id" value="{{ $data->id }}">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="completeModalLabel">Complete Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="result">Result</label>
-                    <textarea name="result" id="result" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="result_file">Result File</label>
-                    <input type="file" name="file" id="file" class="form-control-file">
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" id="skipComplete" class="btn btn-warning">Skip</button>
-            </div>
-        </div>
-    </form>
-  </div>
-</div>
-
-<!-- Modal Reject Request -->
-<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form id="rejectRequestForm" action="{{url('request-reject')}}" method="post" enctype="multipart/form-data">
-        @csrf
-        <input type="hidden" name="id" value="{{ $data->id }}">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="rejectModalLabel">Reject Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="note">Note</label>
-                    <textarea name="note" id="note" class="form-control" required></textarea>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
-    </form>
-  </div>
-</div>
 
 
 @push('script')
-<script>
-    $(document).ready(function() {
-        $('#skipComplete').on('click', function () {
-            const id = $('input[name="id"]').val(); 
-            const token = $('meta[name="csrf-token"]').attr('content');
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You are about to mark this request as COMPLETED without adding any result. This action cannot be undone.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, skip it!',
-                cancelButtonText: 'Cancel',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "{{ url('request-complete-skip') }}",
-                        type: 'POST',
-                        data: {
-                            _token: token,
-                            id: id,    
-                            skip: 'true'
-                        },
-                        beforeSend: function () {
-                            Swal.fire({
-                                title: 'Processing...',
-                                allowOutsideClick: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
-                        },
-                        success: function (response) {
-                            $('#completeModal').modal('hide'); 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Completed!',
-                                text: response.message || 'The request was marked as completed without a result.',
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                window.location.href = "{{ url('agent-request-complated') }}";
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Failed',
-                                text: xhr.responseJSON.message || 'Something went wrong while skipping the result.',
-                            });
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
 @endpush

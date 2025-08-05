@@ -7,14 +7,171 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Requests;
 use App\Models\RequestDetail;
 use Carbon\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class DbadministratorController extends Controller
 {
+    public function reqcompleted(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'Database Administrator')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/dbadministrator-completed/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('dbadministrator.reqcompleted', [
+            'title' => "Database Administrator Completed"
+        ]);
+    }
+
+    public function reqonprogress(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'Database Administrator')
+            ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/dbadministrator-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('dbadministrator.reqonprogress', [
+            'title' => "Database Administrator On Progress"
+        ]);
+    }
+
+    public function reqavailable(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'Database Administrator')
+            ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/dbadministrator-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('dbadministrator.reqavailable', [
+            'title' => "Database Administrator Available"
+        ]);
+    }
+
+    public function detailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('dbadministrator.detailonprogress', [
+            'title' => "Detail Request On Progress",
+            'data' => $data
+        ]);
+    }
+
+    public function detailavailable($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'users.name', 
+                    'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+            
+        return view('dbadministrator.detailavailable', [
+            'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function detailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('dbadministrator.detailcompleted', [
+            'title' => "Detail Request Completed",
+            'data' => $data
+        ]);
+    }
+
     public function formqueryexec()
     {
         $reqtypes = DB::table('request_types')->get();
         return view('dbadministrator.formqueryexec', [
-            'title' => "Form Query Exec",
+            'title' => "Form Query Execution",
             'reqtypes' => $reqtypes
         ]);
     }

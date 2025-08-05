@@ -6,7 +6,7 @@
                 <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
-                    <div class="breadcrumb-item">Infrastructure Complated</div>
+                    <div class="breadcrumb-item">Architecture Completed</div>
                 </div>
             </div>
 
@@ -18,7 +18,7 @@
                         <!-- <div class="mb-3 d-flex justify-content-end gap-3">
                             <a href="{{ route('infrastructure-complated.create') }}" class="btn btn-primary btn-sm ml-2">Tambah data</a>
                         </div> -->
-                        <table id="infracomplatedTable" class="display">
+                        <table id="architectureCompletedTable" class="display">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -67,10 +67,10 @@
             }
 
             // table data
-            $('#infracomplatedTable').DataTable({
+            $('#architectureCompletedTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('infrastructure-complated.index') }}",
+                ajax: "{{ url('architecture-completed') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',

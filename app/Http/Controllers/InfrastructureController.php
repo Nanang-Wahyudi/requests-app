@@ -23,20 +23,21 @@ class InfrastructureController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'users.name', 'request_types.request_type_name')
             ->where('roles.name', 'IT Infrastructure')
-            ->where('requests.status', 'COMPLETED')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return '<a href="#" class="btn btn-primary btn-sm">Detail</a>';
+                        return "<a href='/infrastructure-complated/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                     }
 
         return view('infrastructure.index', [
-            'title' => "Infrastructure"
+            'title' => "Infrastructure Completed"
         ]);
     }
 
@@ -50,19 +51,20 @@ class InfrastructureController extends Controller
             ->select('requests.*', 'users.name', 'request_types.request_type_name')
             ->where('roles.name', 'IT Infrastructure')
             ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return '<a href="#" class="btn btn-primary btn-sm">Detail</a>';
+                        return "<a href='/infrastructure-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                     }
 
         return view('infrastructure.reqonprogress', [
-            'title' => "Infrastructure"
+            'title' => "Infrastructure On Progress"
         ]);
     }
 
@@ -76,19 +78,94 @@ class InfrastructureController extends Controller
             ->select('requests.*', 'users.name', 'request_types.request_type_name')
             ->where('roles.name', 'IT Infrastructure')
             ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return '<a href="#" class="btn btn-primary btn-sm">Detail</a>';
+                        return "<a href='/infrastructure-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                     }
 
         return view('infrastructure.reqavailable', [
-            'title' => "Infrastructure"
+            'title' => "Infrastructure Available"
+        ]);
+    }
+
+    public function detailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('infrastructure.detailonprogress', [
+            'title' => "Detail Request On Progress",
+            'data' => $data
+        ]);
+    }
+
+    public function detailavailable($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'users.name', 
+                    'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+        return view('infrastructure.detailavailable', [
+            'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function detailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('infrastructure.detailcompleted', [
+            'title' => "Detail Request Completed",
+            'data' => $data
         ]);
     }
 
@@ -144,16 +221,15 @@ class InfrastructureController extends Controller
     {
         $reqtypes = DB::table('request_types')->get();
         return view('infrastructure.formspecup', [
-            'title' => "Form Spec Upgrade",
+            'title' => "Form Server Spesification Upgrade",
             'reqtypes' => $reqtypes
         ]);
     }
-
     public function formsoftinstall()
     {
         $reqtypes = DB::table('request_types')->get();
         return view('infrastructure.formsoftinstall', [
-            'title' => "Form Soft Install",
+            'title' => "Form Server Software Installation",
             'reqtypes' => $reqtypes
         ]);
     }

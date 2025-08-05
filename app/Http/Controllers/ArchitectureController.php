@@ -9,14 +9,171 @@ use App\Models\RequestDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class ArchitectureController extends Controller
 {
+    public function reqcompleted(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Architecture')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/architecture-completed/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('architecture.reqcompleted', [
+            'title' => "Architecture Completed"
+        ]);
+    }
+
+    public function reqonprogress(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Architecture')
+            ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/architecture-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('architecture.reqonprogress', [
+            'title' => "Architecture On Progress"
+        ]);
+    }
+
+    public function reqavailable(Request $request)
+    {
+         if ($request->ajax()) {
+            $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('roles', 'roles.id', '=', 'request_types.role_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->select('requests.*', 'users.name', 'request_types.request_type_name')
+            ->where('roles.name', 'IT Architecture')
+            ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'desc')
+            ->get();
+
+            return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        return "<a href='/architecture-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+                    }
+
+        return view('architecture.reqavailable', [
+            'title' => "Architecture Available"
+        ]);
+    }
+
+    public function detailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('architecture.detailonprogress', [
+            'title' => "Detail Request On Progress",
+            'data' => $data
+        ]);
+    }
+
+    public function detailavailable($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'users.name', 
+                    'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+            
+        return view('architecture.detailavailable', [
+            'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function detailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('architecture.detailcompleted', [
+            'title' => "Detail Request Completed",
+            'data' => $data
+        ]);
+    }
+
      public function formreviewarch()
     {
         $reqtypes = DB::table('request_types')->get();
         return view('architecture.formreviewarch', [
-            'title' => "Form Review Architecture",
+            'title' => "Form Architecture Review",
             'reqtypes' => $reqtypes
         ]);
     }
@@ -25,7 +182,7 @@ class ArchitectureController extends Controller
     {
         $reqtypes = DB::table('request_types')->get();
         return view('architecture.formdocarch', [
-            'title' => "Form Doc Arch",
+            'title' => "Form Architecture Documentation",
             'reqtypes' => $reqtypes
         ]);
     }

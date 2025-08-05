@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Requests;
+use App\Models\RequestDetail;
 
 class RequestController extends Controller
 {
@@ -19,20 +22,27 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
-            ->where('requests.status', 'COMPLETED')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function ($row) {
-                        return "<a href='/developer-request-complated/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $buttons = "<a href='/developer-request-complated/{$row->id}/detail' class='btn btn-primary btn-sm'>Detail</a>";
+
+                    if ($row->status === 'REJECTED') {
+                        $buttons .= "<a href='/developer-request-complated/{$row->id}/update' class='btn btn-warning btn-sm ml-1'>Edit</a>";
                     }
 
+                    return $buttons;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('request.reqcomplated', [
-            'title' => "Request Complate"
+            'title' => "Request Completed"
         ]);
     }
 
@@ -45,19 +55,27 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.user_id', auth()->id())
             ->whereIn('requests.status', ['WAITING', 'ON PROGRESS'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return "<a href='/developer-request-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                        $buttons = "<a href='/developer-request-onprogress/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                  
+                        if ($row->status === 'WAITING') {
+                            $buttons .= "<a href='/developer-request-onprogress/{$row->id}/update' class='btn btn-warning btn-sm ml-1'>Edit</a>";
+                            $buttons .= "<button type='button' class='btn btn-danger btn-sm ml-1 btn-delete-request' data-id='{$row->id}'>Delete</button>";
+                        }
+
+                        return $buttons;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                     }
 
         return view('request.reqonprogress', [
-            'title' => "Request on progress"
+            'title' => "Request On Progress"
         ]);
     }
 
@@ -74,6 +92,7 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('request_types.role_id', $userRoles)
             ->where('requests.status', 'WAITING')
+            ->orderBy('requests.id', 'asc')
             ->get();
 
             return DataTables::of($data)
@@ -87,7 +106,7 @@ class RequestController extends Controller
                     }
 
         return view('request.agentreqavailable', [
-            'title' => "Agent Requests Available"
+            'title' => "Requests Available"
         ]);
     }
 
@@ -104,6 +123,7 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
             ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.id', 'asc')
             ->get();
 
             return DataTables::of($data)
@@ -116,7 +136,7 @@ class RequestController extends Controller
                     }
 
         return view('request.agentreqonprogress', [
-            'title' => "Agent Requests Onprogress"
+            'title' => "Requests On Progress"
         ]);
     }
 
@@ -132,27 +152,28 @@ class RequestController extends Controller
             ->join('users', 'users.id', '=', 'requests.user_id')
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
-            ->where('requests.status', 'COMPLETED')
+            ->whereIn('requests.status', ['COMPLETED', 'REJECTED'])
+            ->orderBy('requests.id', 'desc')
             ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        return "<a href='/agent-request-available/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
+                        return "<a href='/agent-request-complated/$row->id/detail' class='btn btn-primary btn-sm'>Detail</a>";
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                     }
 
         return view('request.agentreqcomplated', [
-            'title' => "Agent Requests Complated"
+            'title' => "Requests Completed"
         ]);
     }
 
     public function agentasignreq($id)
     {
         $userpic = auth()->user()->name;
-         $tgl = Carbon::now();
+        $tgl = Carbon::now();
         $tgl_now = $tgl->format('Y-m-d');
         DB::table('requests')
             ->where('id', $id)
@@ -165,18 +186,347 @@ class RequestController extends Controller
         return redirect('agent-request-onprogress')->with('success', 'Request Berhasil diambil.');
     }
 
+    public function completeRequestSkip(Request $request)
+    {
+        $requestId = $request->input('id');
+        $isSkipped = ($request->input('skip') === 'true');
+
+        try {
+            $tgl = Carbon::now();
+            $tgl_now = $tgl->format('Y-m-d');
+
+            $requestToUpdate = Requests::findOrFail($requestId);
+            $requestToUpdate->status = 'COMPLETED';
+            $requestToUpdate->complated_date = $tgl_now;
+            $requestToUpdate->save();
+
+            return response()->json(['message' => 'Request successfully marked as completed without result.'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function completeRequestSubmit(Request $request)
+    {
+        $requestId = $request->input('id');
+
+        try {
+            $tgl = Carbon::now();
+            $tgl_now = $tgl->format('Y-m-d');
+
+            $requestToUpdate = Requests::findOrFail($requestId);
+            $requestToUpdate->status = 'COMPLETED';
+            $requestToUpdate->complated_date = $tgl_now;
+            $requestToUpdate->result = $request->result;
+
+            if ($request->hasFile('file')) {
+
+                $file1 = $request->file('file');
+                $filename1 = uniqid() . '.' . $file1->getClientOriginalExtension();
+                $filePath = $file1->storeAs('document', $filename1, 'public');
+                $requestToUpdate->result_file = $filePath;
+            }
+            $requestToUpdate->save();
+
+            return redirect('agent-request-complated')->with('success', 'Request Berhasil diselesaikan.');
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function rejectRequest(Request $request)
+    {
+        $requestId = $request->input('id');
+
+        try {
+            $tgl = Carbon::now();
+            $tgl_now = $tgl->format('Y-m-d');
+
+            $requestToUpdate = Requests::findOrFail($requestId);
+            $requestToUpdate->status = 'REJECTED';
+            $requestToUpdate->complated_date = $tgl_now;
+            $requestToUpdate->note = $request->note;
+            $requestToUpdate->save();
+
+            return redirect('agent-request-complated')->with('success', 'Request Berhasil Ditolak.');
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to process request: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function agentdetailonprogress($id)
     {
         $data = DB::table('requests')
             ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
             ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
             ->join('request_details', 'requests.id', '=', 'request_details.request_id')
-            ->select('request_details.*', 'request_types.request_type_name', 'requests.status', 'requests.request_date', 'requests.collect_date', 'requests.result', 'requests.result_file', 'requests.note', 'users.name', 'users.email')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date', 
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
             ->where('request_details.request_id', $id)
             ->first();
         return view('request.agentdetailonprogress', [
-            'title' => "Agent detail onprogress",
+            'title' => "Detail Request On Progress",
             'data' => $data
         ]);
+    }
+
+    public function agentdetailavailable($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'users.name', 
+                    'users.email')
+            ->where('request_details.request_id', $id)
+            ->first();
+        return view('request.agentdetailavailable', [
+            'title' => "Detail Request Available",
+            'data' => $data
+        ]);
+    }
+
+    public function agentdetailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('request.agentdetailcompleted', [
+            'title' => "Detail Request Completed",
+            'data' => $data
+        ]);
+    }
+
+    public function devdetailonprogress($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->leftJoin('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+        return view('request.devdetailonprogress', [
+            'title' => "Detail Request On Progress",
+            'data' => $data
+        ]);
+    }
+
+    public function devdetailcompleted($id)
+    {
+        $data = DB::table('requests')
+            ->join('request_types', 'request_types.id', '=', 'requests.request_type_id')
+            ->join('users', 'users.id', '=', 'requests.user_id')
+            ->join('users as pic_users', 'pic_users.name', '=', 'requests.pic')
+            ->join('request_details', 'requests.id', '=', 'request_details.request_id')
+            ->select('request_details.*', 
+                    'request_types.request_type_name', 
+                    'requests.status', 
+                    'requests.request_date', 
+                    'requests.collect_date',
+                    'requests.complated_date', 
+                    'requests.result', 
+                    'requests.result_file',
+                    'requests.note',  
+                    'users.name', 
+                    'users.email', 
+                    'pic_users.name as pic_name',
+                    'pic_users.email as pic_email')
+            ->where('request_details.request_id', $id)
+            ->first();
+
+        return view('request.devdetailcompleted', [
+            'title' => "Detail Request Completed",
+            'data' => $data
+        ]);
+    }
+
+    public function devUpdateRequestOnProgress($id)
+    {
+        $data = DB::table('request_details')->where('request_id', $id)->first();
+
+        $reqtypes = DB::table('request_types')->get();
+
+        return view('request.deveditreqonprogress', [
+            'requestId' => $id,
+            'data' => $data,
+            'reqtypes' => $reqtypes,
+            'title' => 'Update Request'
+        ]);
+    }
+
+    public function devProsesUpdateRequestOnProgress(Request $request, $id)
+    {
+        $filePath = null;
+
+        if ($request->hasFile('file')) {
+            $file1 = $request->file('file');
+            $filename1 = uniqid() . '.' . $file1->getClientOriginalExtension();
+            $filePath = $file1->storeAs('document', $filename1, 'public');
+        }
+
+        $updateData = [
+            'ticket_url' => $request->ticket_url,
+            'server_name' => $request->server_name,
+            'current_spec' => $request->current_spec,
+            'requested_spec' => $request->requested_spec,
+            'software_name' => $request->software_name,
+            'software_version' => $request->software_version,
+            'service_name' => $request->service_name,
+            'feature' => $request->fitur,
+            'source_ip' => $request->source_ip,
+            'destination_ip' => $request->destination_ip,
+            'port' => $request->port,
+            'database_name' => $request->database_name,
+            'query' => $request->querie,
+            'description' => $request->description,
+            'scan_type' => $request->scan_type,
+            'repository_url' => $request->repository_url,
+            'branch_name' => $request->branch_name,
+            'pr_url' => $request->pr_url,
+            'purpose' => $request->purpose,
+        ];
+
+        if ($filePath !== null) {
+            $updateData['file'] = $filePath;
+        }
+
+        DB::table('request_details')->where('request_id', $id)->update($updateData);
+
+        $tgl = Carbon::now();
+        $tgl_now = $tgl->format('Y-m-d');
+
+        DB::table('requests')->where('id', $id)->update([
+            'status' => 'WAITING',
+            'request_date' => $tgl_now,
+            'pic' => null,
+            'collect_date' => null,
+            'complated_date' => null,
+            'note' => null,
+            'request_type_id' => $request->req_id,
+        ]);
+
+        return redirect('developer-request-onprogress')->with('success', 'Request berhasil diperbarui.');
+    }
+
+    public function devUpdateRequestCompleted($id)
+    {
+        $data = DB::table('request_details')->where('request_id', $id)->first();
+
+        $reqtypes = DB::table('request_types')->get();
+
+        return view('request.deveditreqcompleted', [
+            'requestId' => $id,
+            'data' => $data,
+            'reqtypes' => $reqtypes,
+            'title' => 'Update Request'
+        ]);
+    }
+
+    public function devProsesUpdateRequestCompleted(Request $request, $id)
+    {
+        $filePath = null;
+
+        if ($request->hasFile('file')) {
+            $file1 = $request->file('file');
+            $filename1 = uniqid() . '.' . $file1->getClientOriginalExtension();
+            $filePath = $file1->storeAs('document', $filename1, 'public');
+        }
+
+        $updateData = [
+            'ticket_url' => $request->ticket_url,
+            'server_name' => $request->server_name,
+            'current_spec' => $request->current_spec,
+            'requested_spec' => $request->requested_spec,
+            'software_name' => $request->software_name,
+            'software_version' => $request->software_version,
+            'service_name' => $request->service_name,
+            'feature' => $request->fitur,
+            'source_ip' => $request->source_ip,
+            'destination_ip' => $request->destination_ip,
+            'port' => $request->port,
+            'database_name' => $request->database_name,
+            'query' => $request->querie,
+            'description' => $request->description,
+            'scan_type' => $request->scan_type,
+            'repository_url' => $request->repository_url,
+            'branch_name' => $request->branch_name,
+            'pr_url' => $request->pr_url,
+            'purpose' => $request->purpose,
+        ];
+
+        if ($filePath !== null) {
+            $updateData['file'] = $filePath;
+        }
+
+        DB::table('request_details')->where('request_id', $id)->update($updateData);
+
+        $tgl = Carbon::now();
+        $tgl_now = $tgl->format('Y-m-d');
+
+        DB::table('requests')->where('id', $id)->update([
+            'status' => 'WAITING',
+            'request_date' => $tgl_now,
+            'pic' => null,
+            'collect_date' => null,
+            'complated_date' => null,
+            'note' => null,
+            'request_type_id' => $request->req_id,
+        ]);
+
+        return redirect('developer-request-onprogress')->with('success', 'Request berhasil diperbarui.');
+    }
+
+    public function devdeleterequest($id)
+    {
+        $request = Requests::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+
+        RequestDetail::where('request_id', $id)->delete();
+
+        $request->delete();
+
+        return redirect()->back()->with('success', 'Request berhasil dihapus.');
     }
 }

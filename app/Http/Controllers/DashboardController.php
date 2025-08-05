@@ -9,10 +9,10 @@ class DashboardController extends Controller
 {
      public function index() {
 
-        $onprogress = DB::table('requests')->where('status', 'onprogress')->count();
-        $complated = DB::table('requests')->where('status', 'complated')->count();
-        $rejected = DB::table('requests')->where('status', 'rejected')->count();
-        $waiting = DB::table('requests')->where('status', 'waiting')->count();
+        $onprogress = DB::table('requests')->where('status', 'ON PROGRESS')->count();
+        $completed = DB::table('requests')->where('status', 'COMPLETED')->count();
+        $rejected = DB::table('requests')->where('status', 'REJECTED')->count();
+        $waiting = DB::table('requests')->where('status', 'WAITING')->count();
 
         $requests = DB::table('requests')
                 ->select(
@@ -20,7 +20,7 @@ class DashboardController extends Controller
                     'status',
                     DB::raw('COUNT(*) as total')
                 )
-                ->whereIn('status', ['complated', 'rejected', 'onprogress', 'waiting'])
+                ->whereIn('status', ['COMPLETED', 'REJECTED', 'ON PROGRESS', 'WAITING'])
                 ->groupBy('bulan', 'status')
                 ->orderBy('bulan')
                 ->get();
@@ -28,7 +28,7 @@ class DashboardController extends Controller
             // Siapkan struktur array bulan & status
             $bulanList = [];
             $statusData = [
-                'complated' => [],
+                'completed' => [],
                 'rejected' => [],
                 'onprogress' => [],
                 'waiting' => [],
@@ -56,7 +56,7 @@ class DashboardController extends Controller
         return view('home', [
             'title' => 'Dashboard',
             'onprogress' => $onprogress,
-            'complated' => $complated,
+            'completed' => $completed,
             'rejected' => $rejected,
             'waiting' => $waiting,
             'bulanList' => $bulanList,

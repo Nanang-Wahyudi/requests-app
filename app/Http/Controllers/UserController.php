@@ -137,4 +137,29 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Role berhasil diperbarui.']);
     }
+
+    public function formchangepassword()
+    {
+         return view('user.formchangepassword', [
+            'title' => "Form Change Password"
+        ]);
+    }
+
+    public function processchangepassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        if (!Hash::check($request->current_password, Auth::user()->password)) {
+            return back()->withErrors(['message' => 'Password lama tidak sesuai']);
+        }
+
+        Auth::user()->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'Password berhasil diubah');
+    }
 }

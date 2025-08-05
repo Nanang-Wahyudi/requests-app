@@ -3,8 +3,7 @@
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <!-- <h1>{{ $title ?? '' }}</h1> -->
-                 <h1>IT Infrastructure - Request On Progress</h1>
+                <h1>{{ $title ?? '' }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item"><a href="/">Dashboard</a></div>
                     <div class="breadcrumb-item">Infrastructure On Progress</div>
@@ -24,11 +23,11 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Id Request</th>
-                                    <th>Name</th>
+                                    <th>Nama Pemohon</th>
                                     <th>Type Request</th>
-                                    <th>Tanggal Request</th>
+                                    <th>Request Date</th>
                                     <th>PIC</th>
-                                    <th>Tanggal Ambil Request</th>
+                                    <th>Collect Date</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>

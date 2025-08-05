@@ -35,6 +35,10 @@
                         This is card footer
                     </div>
                 </div>
+
+                <form id="delete-form" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </div>
 
 
@@ -110,6 +114,59 @@
                 ]
             });
 
+            $(document).on('click', '.btn-delete-request', function () {
+                const requestId = $(this).data('id');
+                const token = $('meta[name="csrf-token"]').attr('content');
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Data request akan dihapus!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/developer-request-onprogress/${requestId}/delete`,
+                            type: 'POST',
+                            data: {
+                                _token: token
+                            },
+                            beforeSend: function () {
+                                Swal.fire({
+                                    title: 'Menghapus...',
+                                    text: 'Silakan tunggu.',
+                                    allowOutsideClick: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil!',
+                                    text: 'Request berhasil dihapus.',
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload(); 
+                                });
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal!',
+                                    text: 'Terjadi kesalahan saat menghapus data.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
 
         });
     </script>
