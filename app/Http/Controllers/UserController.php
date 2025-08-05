@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -147,19 +148,23 @@ class UserController extends Controller
 
     public function processchangepassword(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|confirmed|min:8',
+            'current_password' => ['required'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], // pastikan ada konfirmasi jika diperlukan
         ]);
 
-        if (!Hash::check($request->current_password, Auth::user()->password)) {
-            return back()->withErrors(['message' => 'Password lama tidak sesuai']);
+        $user = Auth::user();
+
+        // Cek apakah current password cocok
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini salah.'])->withInput();
         }
 
-        Auth::user()->update([
-            'password' => Hash::make($request->password),
-        ]);
+        // Update password
+        $user->password = Hash::make($request->password);
+        $user->save();
 
-        return redirect()->route('users.index')->with('success', 'Password berhasil diubah');
+        return redirect()->back()->with('success', 'Password berhasil diperbarui.');
     }
 }

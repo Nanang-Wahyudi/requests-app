@@ -44,7 +44,7 @@
                             <div class="dropdown-divider"></div>
 
                             @if (auth()->user()->roles()->pluck('name') !== 'Manager IT')
-                            <a href="{{ url('/users/change-password') }}" class="dropdown-item has-icon text-warning">
+                            <a href="{{ url('change-password') }}" class="dropdown-item has-icon text-warning">
                                 <i class="fas fa-key"></i> Ubah Password
                             </a>
                             <div class="dropdown-divider"></div>
