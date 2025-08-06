@@ -507,10 +507,9 @@ class RequestController extends Controller
         $tgl_now = $tgl->format('Y-m-d');
 
         DB::table('requests')->where('id', $id)->update([
-            'status' => 'WAITING',
+            'status' => 'ON PROGRESS',
             'request_date' => $tgl_now,
-            'pic' => null,
-            'collect_date' => null,
+            'collect_date' => $tgl_now,
             'complated_date' => null,
             'note' => null,
             'request_type_id' => $request->req_id,
