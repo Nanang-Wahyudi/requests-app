@@ -3,55 +3,80 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Requests;
 
 class DashboardController extends Controller
 {
-     public function index() {
+    public function index()
+    {
+        $user = Auth::user();
+        $roles = $user->roles()->pluck('name');
 
-        $onprogress = DB::table('requests')->where('status', 'ON PROGRESS')->count();
-        $completed = DB::table('requests')->where('status', 'COMPLETED')->count();
-        $rejected = DB::table('requests')->where('status', 'REJECTED')->count();
-        $waiting = DB::table('requests')->where('status', 'WAITING')->count();
+        $query = DB::table('requests')
+            ->join('request_types', 'requests.request_type_id', '=', 'request_types.id')
+            ->join('roles', 'request_types.role_id', '=', 'roles.id');
 
-        $requests = DB::table('requests')
-                ->select(
-                    DB::raw("DATE_FORMAT(request_date, '%Y-%m') as bulan"),
-                    'status',
-                    DB::raw('COUNT(*) as total')
-                )
-                ->whereIn('status', ['COMPLETED', 'REJECTED', 'ON PROGRESS', 'WAITING'])
-                ->groupBy('bulan', 'status')
-                ->orderBy('bulan')
-                ->get();
+        if ($roles->contains('Manager IT')) {
 
-            // Siapkan struktur array bulan & status
-            $bulanList = [];
-            $statusData = [
-                'completed' => [],
-                'rejected' => [],
-                'onprogress' => [],
-                'waiting' => [],
-            ];
+        } elseif ($roles->contains('Developer')) {
+            $query->where('user_id', $user->id);
+            
+        } else {
+            $query->where(function ($q) use ($user, $roles) {
+                $q->where(function ($subQ) use ($roles) {
+                    $subQ->where('requests.status', 'WAITING')
+                        ->whereIn('roles.name', $roles);
+                })->orWhere(function ($subQ) use ($user) {
+                    $subQ->where('requests.status', '!=', 'WAITING')
+                        ->where('requests.pic', $user->name);
+                });
+            });
+        }
 
-            // Ambil semua bulan unik
-            foreach ($requests as $row) {
-                if (!in_array($row->bulan, $bulanList)) {
-                    $bulanList[] = $row->bulan;
-                }
+        $onprogress = (clone $query)->where('status', 'ON PROGRESS')->count();
+        $completed = (clone $query)->where('status', 'COMPLETED')->count();
+        $rejected  = (clone $query)->where('status', 'REJECTED')->count();
+        $waiting   = (clone $query)->where('status', 'WAITING')->count();
+
+        $chartQuery = (clone $query)
+            ->select(
+                DB::raw("DATE_FORMAT(request_date, '%Y-%m') as bulan"),
+                DB::raw("LOWER(status) as status"),
+                DB::raw('COUNT(*) as total')
+            )
+            ->whereIn('status', ['COMPLETED', 'REJECTED', 'ON PROGRESS', 'WAITING'])
+            ->groupBy('bulan', 'status')
+            ->orderBy('bulan')
+            ->get();
+
+        $bulanList = [];
+        $statusData = [
+            'completed' => [],
+            'rejected' => [],
+            'onprogress' => [],
+            'waiting' => [],
+        ];
+
+        foreach ($chartQuery as $row) {
+            if (!in_array($row->bulan, $bulanList)) {
+                $bulanList[] = $row->bulan;
             }
+        }
 
-            // Inisialisasi data 0 terlebih dahulu
-            foreach ($bulanList as $bulan) {
-                foreach ($statusData as $status => &$arr) {
-                    $arr[$bulan] = 0;
-                }
+        foreach ($bulanList as $bulan) {
+            foreach ($statusData as $status => &$arr) {
+                $arr[$bulan] = 0;
             }
+        }
 
-            // Masukkan nilai total berdasarkan bulan dan status
-            foreach ($requests as $row) {
-                $statusData[$row->status][$row->bulan] = $row->total;
+        foreach ($chartQuery as $row) {
+            $status = strtolower(str_replace(' ', '', $row->status));
+            if (isset($statusData[$status][$row->bulan])) {
+                $statusData[$status][$row->bulan] = $row->total;
             }
+        }
 
         return view('home', [
             'title' => 'Dashboard',
