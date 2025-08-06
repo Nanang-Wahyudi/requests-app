@@ -73,6 +73,21 @@
         </section>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed!',
+                text: '{{ $errors->first() }}',
+                confirmButtonText: 'Oke'
+            });
+        });
+    </script>
+    @endif
+
     @include('layouts.footer')
 </body>
 
