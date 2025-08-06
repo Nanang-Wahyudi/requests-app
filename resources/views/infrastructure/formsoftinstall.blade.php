@@ -65,6 +65,7 @@
                                 <div class="col-md-12 mb-3">
                                     <label for="kendaraan" class="form-label">Request Type</label>
                                     <select class="form-control" name="req_id">
+                                        <option value="">-Pilih Type Request-</option>
                                         @foreach ($reqtypes as $reqtype)
                                             <option value="{{$reqtype->id}}">{{ $reqtype->request_type_name }}</option>
                                         @endforeach
