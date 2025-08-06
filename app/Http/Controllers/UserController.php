@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use App\Mail\SendAccountDetailsMail;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -72,6 +74,8 @@ class UserController extends Controller
         ]);
 
         $user->assignRole($request->role);
+
+         Mail::to($user->email)->send(new SendAccountDetailsMail($user->email, $request->password));
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
     }
