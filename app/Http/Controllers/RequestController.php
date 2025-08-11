@@ -268,7 +268,8 @@ class RequestController extends Controller
                     'request_types.request_type_name', 
                     'requests.status', 
                     'requests.request_date', 
-                    'requests.collect_date', 
+                    'requests.collect_date',
+                    'requests.priority',  
                     'users.name', 
                     'users.email', 
                     'pic_users.name as pic_name',
@@ -291,6 +292,7 @@ class RequestController extends Controller
                     'request_types.request_type_name', 
                     'requests.status', 
                     'requests.request_date', 
+                    'requests.priority', 
                     'users.name', 
                     'users.email')
             ->where('request_details.request_id', $id)
@@ -317,6 +319,7 @@ class RequestController extends Controller
                     'requests.result', 
                     'requests.result_file',
                     'requests.note',  
+                    'requests.priority', 
                     'users.name', 
                     'users.email', 
                     'pic_users.name as pic_name',
@@ -342,6 +345,7 @@ class RequestController extends Controller
                     'requests.status', 
                     'requests.request_date', 
                     'requests.collect_date',
+                    'requests.priority', 
                     'users.name', 
                     'users.email', 
                     'pic_users.name as pic_name',
@@ -370,6 +374,7 @@ class RequestController extends Controller
                     'requests.result', 
                     'requests.result_file',
                     'requests.note',  
+                    'requests.priority', 
                     'users.name', 
                     'users.email', 
                     'pic_users.name as pic_name',
@@ -385,7 +390,11 @@ class RequestController extends Controller
 
     public function devUpdateRequestOnProgress($id)
     {
-        $data = DB::table('request_details')->where('request_id', $id)->first();
+        $data = DB::table('request_details')
+        ->join('requests', 'requests.id', '=', 'request_details.request_id')
+        ->where('request_details.request_id', $id)
+        ->select('request_details.*', 'requests.priority', 'requests.request_type_id')
+        ->first();
 
         $reqtypes = DB::table('request_types')->get();
 
@@ -446,6 +455,7 @@ class RequestController extends Controller
             'complated_date' => null,
             'note' => null,
             'request_type_id' => $request->req_id,
+            'priority' => $request->priority
         ]);
 
         return redirect('developer-request-onprogress')->with('success', 'Request berhasil diperbarui.');
@@ -453,7 +463,11 @@ class RequestController extends Controller
 
     public function devUpdateRequestCompleted($id)
     {
-        $data = DB::table('request_details')->where('request_id', $id)->first();
+        $data = DB::table('request_details')
+        ->join('requests', 'requests.id', '=', 'request_details.request_id')
+        ->where('request_details.request_id', $id)
+        ->select('request_details.*', 'requests.priority', 'requests.request_type_id')
+        ->first();
 
         $reqtypes = DB::table('request_types')->get();
 
@@ -513,6 +527,7 @@ class RequestController extends Controller
             'complated_date' => null,
             'note' => null,
             'request_type_id' => $request->req_id,
+            'priority' => $request->priority
         ]);
 
         return redirect('developer-request-onprogress')->with('success', 'Request berhasil diperbarui.');

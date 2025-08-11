@@ -113,15 +113,15 @@
                                 @endif
 
                                 @if($data->scan_type)
-                                <div class="col-md-12 mb-3">
-                                    <label for="scan_type" class="form-label">Type Scan</label>
-                                    <select class="form-control" name="scan_type">
-                                        <option value="">-Pilih Type Scan-</option>
-                                        <option value="SAST" {{ old('scan_type', $data->scan_type ?? '') == 'SAST' ? 'selected' : '' }}>SAST</option>
-                                        <option value="DAST" {{ old('scan_type', $data->scan_type ?? '') == 'DAST' ? 'selected' : '' }}>DAST</option>
-                                        <option value="Aqua Security" {{ old('scan_type', $data->scan_type ?? '') == 'Aqua Security' ? 'selected' : '' }}>Aqua Security</option>
-                                    </select>
-                                </div>
+                                <select class="form-control" name="scan_type">
+                                    <option value="">-Pilih Type Scan-</option>
+                                    @php
+                                        $selectedScanType = old('scan_type') ?? ($data->scan_type ?? '');
+                                    @endphp
+                                    <option value="SAST" {{ $selectedScanType == 'SAST' ? 'selected' : '' }}>SAST</option>
+                                    <option value="DAST" {{ $selectedScanType == 'DAST' ? 'selected' : '' }}>DAST</option>
+                                    <option value="Aqua Security" {{ $selectedScanType == 'Aqua Security' ? 'selected' : '' }}>Aqua Security</option>
+                                </select>
                                 @endif
 
                                 @if($data->repository_url)
@@ -234,6 +234,16 @@
                                 </div>
                                 @endif
 
+                                <div class="col-md-12 mb-3">
+                                    <label for="priority" class="form-label">Request Priority</label>
+                                    <select class="form-control" name="priority" required>
+                                        <option value="">-Pilih Prioritas Request-</option>
+                                        <option value="1" {{ $data->priority == 1 ? 'selected' : '' }}>Tinggi</option>
+                                        <option value="2" {{ $data->priority == 2 ? 'selected' : '' }}>Sedang</option>
+                                        <option value="3" {{ $data->priority == 3 ? 'selected' : '' }}>Rendah</option>
+                                    </select>
+                                </div>
+
                                 @if($data->purpose)
                                 <div class="col-md-12 mb-3">
                                     <label for="purpose" class="form-label">Purpose</label>
@@ -250,7 +260,8 @@
                                     <select class="form-control" name="req_id">
                                         <option value="">-Pilih Type Request-</option>
                                         @foreach ($reqtypes as $reqtype)
-                                            <option value="{{ $reqtype->id }}" {{ old('req_id', $data->request_type_id ?? '') == $reqtype->id ? 'selected' : '' }}>
+                                            <option value="{{ $reqtype->id }}" 
+                                                {{ (old('req_id') ?? $data->request_type_id) == $reqtype->id ? 'selected' : '' }}>
                                                 {{ $reqtype->request_type_name }}
                                             </option>
                                         @endforeach

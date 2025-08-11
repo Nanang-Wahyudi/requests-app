@@ -26,6 +26,7 @@
                                     <th>PIC</th>
                                     <th>Collect Date</th>
                                     <th>Complated Date</th>
+                                    <th>Priority</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -101,6 +102,16 @@
                     {
                         data: 'complated_date',
                         name: 'complated_date'
+                    },
+                    {
+                        data: 'priority',
+                        name: 'priority',
+                        render: function(data, type, row) {
+                            if (data == 1) return 'Tinggi';
+                            if (data == 2) return 'Sedang';
+                            if (data == 3) return 'Rendah';
+                            return data;
+                        }
                     },
                     {
                         data: 'status',

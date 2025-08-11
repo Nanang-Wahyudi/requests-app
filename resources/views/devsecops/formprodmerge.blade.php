@@ -44,6 +44,16 @@
                                     @enderror
                                  </div>
 
+                                   <div class="col-md-12 mb-3">
+                                    <label for="priority" class="form-label">Request Priority</label>
+                                    <select class="form-control" name="priority" required>
+                                        <option value="">-Pilih Prioritas Request-</option>
+                                        <option value="1">Tinggi</option>
+                                        <option value="2">Sedang</option>
+                                        <option value="3">Rendah</option>
+                                    </select>
+                                 </div>
+
                                 <div class="col-md-12 mb-3">
                                     <label for="kendaraan" class="form-label">Request Type</label>
                                     <select class="form-control" name="req_id">
