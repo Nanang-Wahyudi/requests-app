@@ -26,6 +26,7 @@
                                     <th>PIC</th>
                                     <th>Collect Date</th>
                                     <th>Complated Date</th>
+                                    <th>Time Difference</th>
                                     <th>Priority</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -102,6 +103,39 @@
                     {
                         data: 'complated_date',
                         name: 'complated_date'
+                    },
+                    {
+                        data: null,
+                        name: 'time_difference',
+                        render: function(data) {
+                            // Normalisasi collect_date ke jam 00:00:00
+                            const collectDate = new Date(data.collect_date);
+                            const normalizedCollectDate = new Date(collectDate.getFullYear(), collectDate.getMonth(), collectDate.getDate());
+
+                            // Tentukan deadline berdasarkan priority
+                            const priorityDays = {
+                                1: 1,
+                                2: 2,
+                                3: 3
+                            };
+                            const daysToAdd = priorityDays[data.priority] || 0;
+                            const deadline = new Date(normalizedCollectDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+
+                            // Ambil tanggal penyelesaian
+                            const completedDate = new Date(data.complated_date);
+
+                            // Hitung selisih waktu
+                            const diffMs = completedDate - deadline;
+                            const isLate = diffMs > 0;
+
+                            const absMs = Math.abs(diffMs);
+                            const diffDays = Math.floor(absMs / (1000 * 60 * 60 * 24));
+                            const diffHours = Math.floor((absMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const diffMinutes = Math.floor((absMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                            const prefix = isLate ? '-' : '';
+                            return `${prefix}${diffDays}h ${diffHours}j ${diffMinutes}m`;
+                        }
                     },
                     {
                         data: 'priority',
