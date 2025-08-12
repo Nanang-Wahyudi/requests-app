@@ -72,6 +72,70 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('network-completed') }}",
+                dom: '<"top"lBf>rt<"bottom"ip><"clear">',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Network Completed',
+                        text: 'Export XLS',
+                        className: 'btn btn-success btn-sm ml-5',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Network Completed',
+                        text: 'Export PDF',
+                        className: 'btn btn-danger btn-sm',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                        customize: function (doc) {
+                            doc.styles.tableHeader = {
+                                fillColor: '#2d4154',
+                                color: 'white',
+                                alignment: 'center',
+                                bold: true,
+                                fontSize: 12
+                            };
+                            doc.styles.tableBodyEven = { alignment: 'center', fontSize: 10 };
+                            doc.styles.tableBodyOdd = { alignment: 'center', fontSize: 10 };
+
+                            // Atur lebar kolom manual
+                            doc.content[1].table.widths = [
+                                '5%',   // No
+                                '8%',   // Id Request
+                                '14%',  // Nama Pemohon
+                                '17%',  // Type Request
+                                '9%',   // Request Date
+                                '13%',  // PIC
+                                '9%',   // Collect Date
+                                '9%',   // Complated Date
+                                '8%',   // Priority
+                                '8%'    // Status
+                            ];
+
+                            // Tambah margin
+                            doc.pageMargins = [20, 20, 20, 20];
+
+                            // Tambahkan border untuk tabel
+                            var objLayout = {};
+                            objLayout['hLineWidth'] = function(i) { return 0.5; }; // garis horizontal
+                            objLayout['vLineWidth'] = function(i) { return 0.5; }; // garis vertikal
+                            objLayout['hLineColor'] = function(i) { return '#000000'; }; // warna garis horizontal
+                            objLayout['vLineColor'] = function(i) { return '#000000'; }; // warna garis vertikal
+                            objLayout['paddingLeft'] = function(i) { return 4; };
+                            objLayout['paddingRight'] = function(i) { return 4; };
+                            objLayout['paddingTop'] = function(i) { return 2; };
+                            objLayout['paddingBottom'] = function(i) { return 2; };
+
+                            doc.content[1].layout = objLayout;
+                        }
+                    }
+                ],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',

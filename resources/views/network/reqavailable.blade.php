@@ -73,7 +73,7 @@
                 buttons: [
                     {
                         extend: 'excelHtml5',
-                        title: 'Architecture Available',
+                        title: 'Network Available',
                         text: 'Export XLS',
                         className: 'btn btn-success btn-sm ml-5',
                         exportOptions: {
@@ -82,7 +82,7 @@
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'Architecture Available',
+                        title: 'Network Available',
                         text: 'Export PDF',
                         className: 'btn btn-danger btn-sm',
                         orientation: 'landscape',
