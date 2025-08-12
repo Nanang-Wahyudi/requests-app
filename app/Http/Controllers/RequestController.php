@@ -92,6 +92,7 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('request_types.role_id', $userRoles)
             ->where('requests.status', 'WAITING')
+            ->orderBy('requests.priority', 'asc')
             ->orderBy('requests.id', 'asc')
             ->get();
 
@@ -123,6 +124,7 @@ class RequestController extends Controller
             ->select('requests.*', 'request_types.request_type_name', 'users.name')
             ->where('requests.pic', $userpic)
             ->where('requests.status', 'ON PROGRESS')
+            ->orderBy('requests.priority', 'asc')
             ->orderBy('requests.id', 'asc')
             ->get();
 
