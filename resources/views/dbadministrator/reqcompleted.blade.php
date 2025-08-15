@@ -29,6 +29,7 @@
                                     <th>PIC</th>
                                     <th>Collect Date</th>
                                     <th>Complated Date</th>
+                                    <th>Time Difference</th>
                                     <th>Priority</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
@@ -106,16 +107,17 @@
 
                             // Atur lebar kolom manual
                             doc.content[1].table.widths = [
-                                '5%',   // No
-                                '8%',   // Id Request
-                                '14%',  // Nama Pemohon
-                                '17%',  // Type Request
-                                '9%',   // Request Date
-                                '13%',  // PIC
-                                '9%',   // Collect Date
-                                '9%',   // Complated Date
-                                '8%',   // Priority
-                                '8%'    // Status
+                                '4.5%',  // No
+                                '7.3%',  // Id Request
+                                '12.7%', // Nama Pemohon
+                                '15.5%', // Type Request
+                                '8.2%',  // Request Date
+                                '11.8%', // PIC
+                                '8.2%',  // Collect Date
+                                '8.2%',  // Complated Date
+                                '9.1%',  // Time Difference
+                                '7.3%',  // Priority
+                                '7.3%'   // Status
                             ];
 
                             // Tambah margin
@@ -169,6 +171,39 @@
                     {
                         data: 'complated_date',
                         name: 'complated_date'
+                    },
+                    {
+                        data: null,
+                        name: 'time_difference',
+                        render: function(data) {
+                            // Normalisasi collect_date ke jam 00:00:00
+                            const collectDate = new Date(data.collect_date);
+                            const normalizedCollectDate = new Date(collectDate.getFullYear(), collectDate.getMonth(), collectDate.getDate());
+
+                            // Tentukan deadline berdasarkan priority
+                            const priorityDays = {
+                                1: 1,
+                                2: 2,
+                                3: 3
+                            };
+                            const daysToAdd = priorityDays[data.priority] || 0;
+                            const deadline = new Date(normalizedCollectDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+
+                            // Ambil tanggal penyelesaian
+                            const completedDate = new Date(data.complated_date);
+
+                            // Hitung selisih waktu
+                            const diffMs = completedDate - deadline;
+                            const isLate = diffMs > 0;
+
+                            const absMs = Math.abs(diffMs);
+                            const diffDays = Math.floor(absMs / (1000 * 60 * 60 * 24));
+                            const diffHours = Math.floor((absMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const diffMinutes = Math.floor((absMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                            const prefix = isLate ? '-' : '';
+                            return `${prefix}${diffDays}h ${diffHours}j ${diffMinutes}m`;
+                        }
                     },
                     {
                         data: 'priority',
