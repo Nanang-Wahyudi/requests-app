@@ -46,7 +46,21 @@
                         <h6 class="mb-3">Status Permintaan</h6>
                         <table class="table table-bordered">
                             <tr>
-                                <th width="30%">Status</th>
+                                <th width="30%">Priority</th>
+                                <td>
+                                    @if ($data->priority == 1)
+                                        <span class="badge badge-danger">Tinggi</span>
+                                    @elseif ($data->priority == 2)
+                                        <span class="badge badge-warning">Sedang</span>
+                                    @elseif ($data->priority == 3)
+                                        <span class="badge badge-primary">Rendah</span>
+                                    @else
+                                        <span class="badge badge-secondary">Tidak Diketahui</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
                                 <td>
                                     @php
                                         $status = strtolower($data->status);

@@ -23,6 +23,7 @@
                                     <th>Nama Pemohon</th>
                                     <th>Type Request</th>
                                     <th>Request Date</th>
+                                    <th>Priority</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -85,6 +86,16 @@
                     {
                         data: 'request_date',
                         name: 'request_date'
+                    },
+                    {
+                        data: 'priority',
+                        name: 'priority',
+                        render: function(data, type, row) {
+                            if (data == 1) return 'Tinggi';
+                            if (data == 2) return 'Sedang';
+                            if (data == 3) return 'Rendah';
+                            return data;
+                        }
                     },
                     {
                         data: 'action',

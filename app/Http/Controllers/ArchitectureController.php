@@ -106,6 +106,7 @@ class ArchitectureController extends Controller
                     'requests.status', 
                     'requests.request_date', 
                     'requests.collect_date',
+                    'requests.priority',
                     'users.name', 
                     'users.email', 
                     'pic_users.name as pic_name',
@@ -129,6 +130,7 @@ class ArchitectureController extends Controller
                     'request_types.request_type_name', 
                     'requests.status', 
                     'requests.request_date', 
+                    'requests.priority',
                     'users.name', 
                     'users.email')
             ->where('request_details.request_id', $id)
@@ -156,6 +158,7 @@ class ArchitectureController extends Controller
                     'requests.result', 
                     'requests.result_file',
                     'requests.note',  
+                    'requests.priority',
                     'users.name', 
                     'users.email', 
                     'pic_users.name as pic_name',
@@ -197,7 +200,8 @@ class ArchitectureController extends Controller
             'request_date' => $tgl_now,
             'status' => 'WAITING',
             'user_id' => $user_id,
-            'request_type_id' => $request->req_id
+            'request_type_id' => $request->req_id,
+            'priority' => $request->priority
         ]);
 
         if ($req && $request->hasFile('file')) {
@@ -228,7 +232,8 @@ class ArchitectureController extends Controller
             'request_date' => $tgl_now,
             'status' => 'WAITING',
             'user_id' => $user_id,
-            'request_type_id' => $request->req_id
+            'request_type_id' => $request->req_id,
+            'priority' => $request->priority
         ]);
 
         if ($req) {

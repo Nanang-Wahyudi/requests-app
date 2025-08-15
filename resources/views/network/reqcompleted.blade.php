@@ -29,6 +29,8 @@
                                     <th>PIC</th>
                                     <th>Collect Date</th>
                                     <th>Complated Date</th>
+                                    <th>Time Difference</th>
+                                    <th>Priority</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -71,6 +73,71 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('network-completed') }}",
+                dom: '<"top"lBf>rt<"bottom"ip><"clear">',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Network Completed',
+                        text: 'Export XLS',
+                        className: 'btn btn-success btn-sm ml-5',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Network Completed',
+                        text: 'Export PDF',
+                        className: 'btn btn-danger btn-sm',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                        customize: function (doc) {
+                            doc.styles.tableHeader = {
+                                fillColor: '#2d4154',
+                                color: 'white',
+                                alignment: 'center',
+                                bold: true,
+                                fontSize: 12
+                            };
+                            doc.styles.tableBodyEven = { alignment: 'center', fontSize: 10 };
+                            doc.styles.tableBodyOdd = { alignment: 'center', fontSize: 10 };
+
+                            // Atur lebar kolom manual
+                           doc.content[1].table.widths = [
+                                '4.5%',  // No
+                                '7.3%',  // Id Request
+                                '12.7%', // Nama Pemohon
+                                '15.5%', // Type Request
+                                '8.2%',  // Request Date
+                                '11.8%', // PIC
+                                '8.2%',  // Collect Date
+                                '8.2%',  // Complated Date
+                                '9.1%',  // Time Difference
+                                '7.3%',  // Priority
+                                '7.3%'   // Status
+                            ];
+
+                            // Tambah margin
+                            doc.pageMargins = [20, 20, 20, 20];
+
+                            // Tambahkan border untuk tabel
+                            var objLayout = {};
+                            objLayout['hLineWidth'] = function(i) { return 0.5; }; // garis horizontal
+                            objLayout['vLineWidth'] = function(i) { return 0.5; }; // garis vertikal
+                            objLayout['hLineColor'] = function(i) { return '#000000'; }; // warna garis horizontal
+                            objLayout['vLineColor'] = function(i) { return '#000000'; }; // warna garis vertikal
+                            objLayout['paddingLeft'] = function(i) { return 4; };
+                            objLayout['paddingRight'] = function(i) { return 4; };
+                            objLayout['paddingTop'] = function(i) { return 2; };
+                            objLayout['paddingBottom'] = function(i) { return 2; };
+
+                            doc.content[1].layout = objLayout;
+                        }
+                    }
+                ],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
@@ -104,6 +171,49 @@
                     {
                         data: 'complated_date',
                         name: 'complated_date'
+                    },
+                    {
+                        data: null,
+                        name: 'time_difference',
+                        render: function(data) {
+                            // Normalisasi collect_date ke jam 00:00:00
+                            const collectDate = new Date(data.collect_date);
+                            const normalizedCollectDate = new Date(collectDate.getFullYear(), collectDate.getMonth(), collectDate.getDate());
+
+                            // Tentukan deadline berdasarkan priority
+                            const priorityDays = {
+                                1: 1,
+                                2: 2,
+                                3: 3
+                            };
+                            const daysToAdd = priorityDays[data.priority] || 0;
+                            const deadline = new Date(normalizedCollectDate.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+
+                            // Ambil tanggal penyelesaian
+                            const completedDate = new Date(data.complated_date);
+
+                            // Hitung selisih waktu
+                            const diffMs = completedDate - deadline;
+                            const isLate = diffMs > 0;
+
+                            const absMs = Math.abs(diffMs);
+                            const diffDays = Math.floor(absMs / (1000 * 60 * 60 * 24));
+                            const diffHours = Math.floor((absMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const diffMinutes = Math.floor((absMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                            const prefix = isLate ? '-' : '';
+                            return `${prefix}${diffDays}h ${diffHours}j ${diffMinutes}m`;
+                        }
+                    },
+                    {
+                        data: 'priority',
+                        name: 'priority',
+                        render: function(data, type, row) {
+                            if (data == 1) return 'Tinggi';
+                            if (data == 2) return 'Sedang';
+                            if (data == 3) return 'Rendah';
+                            return data;
+                        }
                     },
                     {
                         data: 'status',

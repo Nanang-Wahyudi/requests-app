@@ -15,5 +15,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/components.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
     @stack('style')
 </head>
